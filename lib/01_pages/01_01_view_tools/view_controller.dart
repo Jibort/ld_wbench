@@ -74,9 +74,11 @@ abstract class ViewController extends GetxController {
 
 // ACTUALITZACIÓ DELS GETBUILDERS ---
   void notify({List<int>? pTargets}) {
+    Debug.info("ViewController.notify($pTargets)");
     List<int> targets = pTargets ?? wgIds;
     if (_state != null) { _state!.clock = !_state!.clock; }
     for (int wgId in targets) {
+      Debug.info("Target: $wgId");
       update([wgId], true);
     }
   }

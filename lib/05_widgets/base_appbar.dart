@@ -115,7 +115,7 @@ class _ProgressTitleWidget extends GetWidget {
               ),
             ]);
           } else {
-            return Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
+            return Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.end, children: [
               Text("Unknown State!", style: txsAppBarProgressionTitleStyle(pCxt: pCxt, pFgColor: _fgColor)),
               SizedBox(
                 width: null,

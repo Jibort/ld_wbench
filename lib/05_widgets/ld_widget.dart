@@ -69,6 +69,7 @@ abstract class LdWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (isVisible && runtimeType != LdButton) Text(label, style: txsLabelStyle(context)),

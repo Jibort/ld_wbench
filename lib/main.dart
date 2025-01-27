@@ -2,6 +2,7 @@
 // CreatedAt: 2025/01/18 ds. JIQ
 
 import 'package:flutter/material.dart';
+import 'package:ld_wbench/02_tools/index.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -12,11 +13,12 @@ import '01_pages/routes.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-runApp(ChangeNotifierProvider(
+  Get.put<LdImageController>(LdImageController(), permanent: true);
+  runApp(ChangeNotifierProvider(
       create: (context) => ThemeProvider(),
       child: const Application(true),
-    ),);
+    ),
+  );
 }
 
 const Size iPhone8PlusSize = Size(414.0, 736.0);

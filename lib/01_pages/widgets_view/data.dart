@@ -64,7 +64,7 @@ class WidgetsViewData extends ViewData {
 
     stLoadImage(FiFo<dynamic> pQueue, List<dynamic> pArgs) async {
       try {
-        await LdImageController.instance.loadImage("Add_Location", icon: Icons.add_location, pWidth: 20.0.h, pHeight: 20.0.h);
+        await LdImageController.instance.loadImage("Add_Location", targetId: 2_000, icon: Icons.add_location, pWidth: 20.0.h, pHeight: 20.0.h);
         
       } on Exception catch (pExc) {
         exc = pExc;

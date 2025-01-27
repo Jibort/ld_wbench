@@ -30,45 +30,139 @@ class LdButton extends LdWidget {
     this.isDisabled = false, 
   });
 
-
   @override
   Widget buildContent(BuildContext context) {
-    final theme = Theme.of(context);
+    Debug.info("LdButton.buildContent() - Construint botó amb id: $id");
 
     return GetBuilder<LdImageController>(
-      builder: (_) {
-        Image? icon = imageKey != null ? LdImageController.instance.getStoredImage(imageKey!) : null;
+      id: id,  // 🔥 Assignem l'ID únic al GetBuilder
+      builder: (controller) {
+        Debug.info("LdButton.buildContent() - Construint botó amb imageKey: $imageKey");
 
-        if (icon == null) {
-          Debug.info("LdButton.buildContent() - ⚠️ Encara no hi ha icona disponible per a $imageKey. Renderitzant sense icona.");
+        if (imageKey == null) {
+          Debug.info("LdButton.buildContent() - ⚠️ No s'ha proporcionat cap clau d'imatge.");
+          return _buildButton(context, null);
         }
 
-        return ElevatedButton(
-          onPressed: isDisabled ? null : onPressed,
-          style: ElevatedButton.styleFrom(
-            backgroundColor: isDisabled ? theme.colorScheme.surface.withValues(alpha: 0.5) :
-                            isDanger ? Colors.redAccent :
-                            isPrimary ? theme.colorScheme.primary :
-                            theme.colorScheme.secondary,
-            foregroundColor: isDisabled ? Colors.grey :
-                            isDanger || isPrimary ? theme.colorScheme.onPrimary :
-                            theme.colorScheme.onSecondary,
-            padding: EdgeInsets.symmetric(vertical: 14.0, horizontal: 14.0),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              if (icon != null) ...[
-                icon,
-                SizedBox(width: 8.0),
-              ] else
-                SizedBox(width: 20, height: 20), // 🔥 Espai reservat per la icona per evitar moviments visuals
-              Text(label, style: TextStyle(fontSize: 16)),
-            ],
-          ),
-        );
+        Image? icon = controller.getStoredImage(imageKey!);
+
+        if (icon == null) {
+          Debug.info("LdButton.buildContent() - ⚠️ La icona encara no està disponible: $imageKey");
+
+          // 🔥 Ara només actualitzem aquest botó quan la imatge estigui carregada
+          controller.loadImage(
+            imageKey!,
+            targetId: id,
+            assetPath: assetIconPath,
+            icon: iconData,
+            pWidth: iconSize ?? 32.0,
+            pHeight: iconSize ?? 32.0,
+          );
+
+          return _buildButton(context, null); // Retornem el botó sense icona inicialment
+        }
+
+        Debug.info("LdButton.buildContent() - ✅ Icona carregada per $imageKey");
+        return _buildButton(context, icon);
       },
+    );
+  }
+
+
+  // @override
+  // Widget buildContent(BuildContext context) {
+  //   Debug.info("LdButton.buildContent() - Construint botó amb id: $id");
+
+  //   return GetBuilder<LdImageController>(
+  //     id: id,  // 🔥 Assignem l'ID únic al GetBuilder
+  //     builder: (controller) {
+  //       Debug.info("LdButton.buildContent() - Construint botó amb imageKey: $imageKey");
+
+  //       if (imageKey == null) {
+  //         Debug.info("LdButton.buildContent() - ⚠️ No s'ha proporcionat cap clau d'imatge.");
+  //         return _buildButton(context, null);
+  //       }
+
+  //       Image? icon = controller.getStoredImage(imageKey!);
+
+  //       if (icon == null) {
+  //         Debug.info("LdButton.buildContent() - ⚠️ La icona encara no està disponible: $imageKey");
+
+  //         // 🔥 Ara només actualitzem aquest botó quan la imatge estigui carregada
+  //         controller.loadImage(imageKey!, targetId: id);
+
+  //         return _buildButton(context, null); // Retornem el botó sense icona inicialment
+  //       }
+
+  //       Debug.info("LdButton.buildContent() - ✅ Icona carregada per $imageKey");
+  //       return _buildButton(context, icon);
+  //     },
+  //   );
+  // }
+
+  // @override
+  // Widget buildContent(BuildContext context) {
+  //   Debug.info("LdButton.buildContent() - Construint botó amb id: $id");
+
+  //   return GetBuilder<LdImageController>(
+  //     id: id,
+  //     builder: (controller) {
+  //       Debug.info("LdButton.buildContent() - Construint botó amb imageKey: $imageKey");
+
+  //       if (imageKey == null) {
+  //         Debug.info("LdButton.buildContent() - ⚠️ No s'ha proporcionat cap clau d'imatge.");
+  //         return _buildButton(context, null);
+  //       }
+
+  //       // // 🔥 Comprovació addicional abans de cridar getStoredImage()
+  //       // if (LdImageController.instance == null) {
+  //       //   Debug.info("LdButton.buildContent() - ⚠️ LdImageController.instance és nul!");
+  //       //   return _buildButton(context, null);
+  //       // }
+
+  //       // Image? icon = LdImageController.instance!.getStoredImage(imageKey!);
+  //       Image? icon = controller.getStoredImage(imageKey!);
+
+  //       if (icon == null) {
+  //         Debug.info("LdButton.buildContent() - ⚠️ La icona encara no està disponible: $imageKey");
+  //         controller.loadImage(imageKey!);
+  //         return _buildButton(context, null);
+  //       }
+
+  //       Debug.info("LdButton.buildContent() - ✅ Icona carregada per $imageKey");
+  //       return _buildButton(context, icon);
+  //     },
+  //   );
+  // }
+
+  /// 🔥 Mètode privat per encapsular la creació del botó
+  Widget _buildButton(BuildContext context, Image? icon) {
+    final theme = Theme.of(context);
+
+    return ElevatedButton(
+      onPressed: isDisabled ? null : onPressed,
+      style: ElevatedButton.styleFrom(
+        backgroundColor: isDisabled ? theme.colorScheme.surface.withValues(alpha: 0.5) :
+                        isDanger ? Colors.redAccent :
+                        isPrimary ? theme.colorScheme.primary :
+                        theme.colorScheme.secondary,
+        foregroundColor: isDisabled ? Colors.grey :
+                        isDanger || isPrimary ? theme.colorScheme.onPrimary :
+                        theme.colorScheme.onSecondary,
+        padding: EdgeInsets.symmetric(vertical: 14.0, horizontal: 14.0),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (icon != null) ...[
+            icon,
+            SizedBox(width: 8.0),
+          ],
+            // SizedBox(width: 20, height: 20), // 🔥 Espai reservat per evitar moviments visuals
+          Text(label, style: TextStyle(fontSize: 16)),
+        ],
+      ),
     );
   }
 
