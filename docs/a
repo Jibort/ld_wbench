@@ -1,0 +1,93 @@
+Launching lib\main.dart on sdk gphone64 x86 64 in debug mode...
+√ Built build\app\outputs\flutter-apk\app-debug.apk
+I/flutter ( 9529): [IMPORTANT:flutter/shell/platform/android/android_context_vk_impeller.cc(60)] Using the Impeller rendering backend (Vulkan).
+Connecting to VM Service at ws://127.0.0.1:60694/pY8-pqZ0HQI=/ws
+Connected to the VM Service.
+[GETX] Instance "GetMaterialController" has been created
+[GETX] Instance "GetMaterialController" has been initialized
+[GETX] GOING TO ROUTE /widgetsView
+I/flutter ( 9529): INFO: WidgetsViewBindings.dependencies() [in]
+I/flutter ( 9529): INFO: ViewData(...) [constructor]
+I/flutter ( 9529): INFO: WidgetsViewData(title, msg, errorCode, errorMessage)
+I/flutter ( 9529): INFO: ViewController(...) [constructor]
+[GETX] Instance "WidgetsViewCtrl" has been created with tag "WidgetsViewCtrl"
+I/flutter ( 9529): INFO: WidgetsViewCtrl - onInit()
+[GETX] Instance "WidgetsViewCtrl" with tag "WidgetsViewCtrl" has been initialized
+I/flutter ( 9529): INFO: WidgetsViewBindings.dependencies() [out]
+I/flutter ( 9529): INFO: WidgetsView() [constructor])
+I/flutter ( 9529): INFO: WidgetsView.build(BuildContext)
+I/flutter ( 9529): INFO: WidgetsViewCtrl.buildWidget(BuildContext)
+
+════════ Exception caught by widgets library ═══════════════════════════════════
+The following _TypeError was thrown building LdButton(dependencies: [InheritedCupertinoTheme, _InheritedTheme, _LocalizationsScope-[GlobalKey#08b96]]):
+Null check operator used on a null value
+
+The relevant error-causing widget was:
+    LdButton LdButton:file:///C:/Projectes/ld_workbench/ld_wbench/lib/01_pages/widgets_view/controller.dart:38:9
+
+When the exception was thrown, this was the stack:
+#0      GetBuilderState.initState (package:get/get_state_manager/src/simple/get_state.dart:134:40)
+#1      StatefulElement._firstBuild (package:flutter/src/widgets/framework.dart:5762:55)
+#2      ComponentElement.mount (package:flutter/src/widgets/framework.dart:5607:5)
+#3      Element.inflateWidget (package:flutter/src/widgets/framework.dart:4480:16)
+#4      MultiChildRenderObjectElement.inflateWidget (package:flutter/src/widgets/framework.dart:7049:36)
+#5      MultiChildRenderObjectElement.mount (package:flutter/src/widgets/framework.dart:7061:32)
+...     Normal element mounting (7 frames)
+#12     Element.inflateWidget (package:flutter/src/widgets/framework.dart:4480:16)
+#13     MultiChildRenderObjectElement.inflateWidget (package:flutter/src/widgets/framework.dart:7049:36)
+#14     MultiChildRenderObjectElement.mount (package:flutter/src/widgets/framework.dart:7061:32)
+...     Normal element mounting (28 frames)
+#42     Element.inflateWidget (package:flutter/src/widgets/framework.dart:4480:16)
+#43     MultiChildRenderObjectElement.inflateWidget (package:flutter/src/widgets/framework.dart:7049:36)
+#44     MultiChildRenderObjectElement.mount (package:flutter/src/widgets/framework.dart:7061:32)
+...     Normal element mounting (338 frames)
+#382    Element.inflateWidget (package:flutter/src/widgets/framework.dart:4480:16)
+#383    MultiChildRenderObjectElement.inflateWidget (package:flutter/src/widgets/framework.dart:7049:36)
+#384    MultiChildRenderObjectElement.mount (package:flutter/src/widgets/framework.dart:7061:32)
+...     Normal element mounting (466 frames)
+#850    Element.inflateWidget (package:flutter/src/widgets/framework.dart:4480:16)
+#851    Element.updateChild (package:flutter/src/widgets/framework.dart:3957:20)
+#852    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5656:16)
+#853    StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5794:11)
+#854    Element.rebuild (package:flutter/src/widgets/framework.dart:5347:7)
+#855    BuildScope._tryRebuild (package:flutter/src/widgets/framework.dart:2694:15)
+#856    BuildScope._flushDirtyElements (package:flutter/src/widgets/framework.dart:2753:11)
+#857    BuildOwner.buildScope (package:flutter/src/widgets/framework.dart:3048:18)
+#858    WidgetsBinding.drawFrame (package:flutter/src/widgets/binding.dart:1176:21)
+#859    RendererBinding._handlePersistentFrameCallback (package:flutter/src/rendering/binding.dart:475:5)
+#860    SchedulerBinding._invokeFrameCallback (package:flutter/src/scheduler/binding.dart:1397:15)
+#861    SchedulerBinding.handleDrawFrame (package:flutter/src/scheduler/binding.dart:1318:9)
+#862    SchedulerBinding.scheduleWarmUpFrame.<anonymous closure> (package:flutter/src/scheduler/binding.dart:1040:9)
+#863    PlatformDispatcher.scheduleWarmUpFrame.<anonymous closure> (dart:ui/platform_dispatcher.dart:845:16)
+#867    _RawReceivePort._handleMessage (dart:isolate-patch/isolate_patch.dart:184:12)
+(elided 3 frames from class _Timer and dart:async-patch)
+
+════════════════════════════════════════════════════════════════════════════════
+
+════════ Exception caught by widgets library ═══════════════════════════════════
+Null check operator used on a null value
+The relevant error-causing widget was:
+    LdButton LdButton:file:///C:/Projectes/ld_workbench/ld_wbench/lib/01_pages/widgets_view/controller.dart:48:9
+════════════════════════════════════════════════════════════════════════════════
+[GETX] Instance "ViewController" has been created
+[GETX] Instance "ViewController" has been initialized
+[GETX] Instance "GetLifeCycleBase?" is not registered.
+
+════════ Exception caught by rendering library ═════════════════════════════════
+A RenderFlex overflowed by 199166 pixels on the bottom.
+The relevant error-causing widget was:
+    Column Column:file:///C:/Projectes/ld_workbench/ld_wbench/lib/01_pages/widgets_view/controller.dart:37:18
+The specific RenderFlex in question is: RenderFlex#28fc1 relayoutBoundary=up2 OVERFLOWING
+════════════════════════════════════════════════════════════════════════════════
+I/flutter ( 9529): INFO: WidgetsViewCtrl - onReady()
+I/flutter ( 9529): INFO: WidgetsViewData.loadData() async [1]
+I/flutter ( 9529): INFO: WidgetsViewData.controller [getter]
+I/flutter ( 9529): INFO: WidgetsViewData.loadData() async [2]
+I/flutter ( 9529): INFO: WidgetsViewData.controller [getter]
+[GETX] Instance "LdImageController" has been created
+[GETX] Instance "LdImageController" has been initialized
+I/flutter ( 9529): INFO: LdImageController.loadImage() - Iniciant càrrega de: Add_Location
+I/flutter ( 9529): INFO: LdImageController.loadImage() - ✅ Imatge carregada: Add_Location
+I/flutter ( 9529): INFO: WidgetsViewData.loadData() - Finalitzat correctament
+[GETX] Instance "GetLifeCycleBase?" is not registered.
+D/ProfileInstaller( 9529): Installing profile for com.example.ld_wbench

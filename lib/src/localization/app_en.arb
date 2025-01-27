@@ -1,0 +1,6 @@
+{
+  "appTitle": "ld_wbench",
+  "@appTitle": {
+    "description": "The title of the application"
+  }
+}
