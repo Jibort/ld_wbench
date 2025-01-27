@@ -31,7 +31,7 @@ abstract class ViewController extends GetxController {
     required String pMsg,
     String? pErrorCode, String? pErrorMessage,
     Exception? pException}) {
-      Debug.info("ViewController(...) [constructor]");
+      // Debug.info(("ViewController(...) [constructor]");
       //_state = pConstr(pCtrl: this, pTitle: pTitle, pMsg: pMsg, pErrorCode: pErrorCode, pErrorMessage: pErrorMessage); 
   }
 
@@ -74,11 +74,11 @@ abstract class ViewController extends GetxController {
 
 // ACTUALITZACIÓ DELS GETBUILDERS ---
   void notify({List<int>? pTargets}) {
-    Debug.info("ViewController.notify($pTargets)");
+    // Debug.info(("ViewController.notify($pTargets)");
     List<int> targets = pTargets ?? wgIds;
     if (_state != null) { _state!.clock = !_state!.clock; }
     for (int wgId in targets) {
-      Debug.info("Target: $wgId");
+      // Debug.info(("Target: $wgId");
       update([wgId], true);
     }
   }
@@ -98,13 +98,13 @@ abstract class ViewController extends GetxController {
   void onInit() {
     super.onInit();
     addWidgets([WidgetKey.appBar, WidgetKey.appBarProgress]);
-    Debug.info("$runtimeType - onInit()");
+    // Debug.info(("$runtimeType - onInit()");
   }
 
   @override
   void onReady() {
     super.onReady();
-    Debug.info("$runtimeType - onReady()");
+    // Debug.info(("$runtimeType - onReady()");
     state.loadData();  // Només es crida una vegada, després que la vista estigui llesta
   }
   
@@ -112,16 +112,16 @@ abstract class ViewController extends GetxController {
   void onClose() {
     super.onClose();
 
-    final String ctrlTag = runtimeType.toString();
-      Debug.info("🗑 onClose() de 'ViewController' amb tag $ctrlTag");
+    // final String ctrlTag = runtimeType.toString();
+      // Debug.info(("🗑 onClose() de 'ViewController' amb tag $ctrlTag");
   }
 
   @override
   void dispose() {
     super.dispose();
     
-    final String ctrlTag = runtimeType.toString();
-    Debug.info("🗑 dispose() de 'ViewController' amb tag $ctrlTag");
+    // final String ctrlTag = runtimeType.toString();
+    // Debug.info(("🗑 dispose() de 'ViewController' amb tag $ctrlTag");
   }
 
 

@@ -7,6 +7,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+// TAMANYS DE LES ICONES --------------
+final double defIconWidth = 24.0.h;
+final double defIconHeight = 24.0.h;
+
 // COLORS CONSTANTS -------------------
 const Color lightPrimary = Color(0xFF0077B6);    // Blau primary intens 
 const Color lightSecondary = Color(0xFF48CAE4); // Blau secundary
@@ -79,7 +83,7 @@ class LdTheme {
 
 // CLASSE DE GESTIÓ DE TEMES ----------
 class ThemeProvider with ChangeNotifier {
-  ThemeMode _themeMode = ThemeMode.system; // Per defecte, segueix el sistema
+  ThemeMode _themeMode = ThemeMode.light;
   ThemeMode get mode => _themeMode;
 
   void toggleTheme() {

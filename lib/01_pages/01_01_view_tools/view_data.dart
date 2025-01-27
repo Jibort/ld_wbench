@@ -2,7 +2,6 @@
 // CreatedAt: 2025/01/18 ds. JIQ
 
 import 'package:ld_wbench/01_pages/01_01_view_tools/index.dart';
-import 'package:ld_wbench/02_tools/index.dart';
 
 abstract class ViewData extends DeepDo {
   // MEMBRES --------------------------
@@ -33,7 +32,7 @@ abstract class ViewData extends DeepDo {
     _errorMessage = pErrorMessage,
     _exception = pException,
     super(null) {
-      Debug.info("ViewData(...) [constructor]");
+      // Debug.info(("ViewData(...) [constructor]");
   }
 
   // GETTERS i SETTERS ----------------

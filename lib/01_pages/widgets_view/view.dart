@@ -19,22 +19,22 @@ export "data.dart";
 class WidgetsViewBindings extends Bindings {
   @override
   void dependencies() {
-    Debug.info("WidgetsViewBindings.dependencies() [in]");
+    // Debug.info(("WidgetsViewBindings.dependencies() [in]");
     WidgetsViewData data = WidgetsViewData(pTitle: "CiewTitle", pMsg: "");
      Get.put(WidgetsViewCtrl(pState: data), tag: WidgetsViewCtrl.className, permanent: false);
     // Get.put(WidgetsViewCtrl(pState: data), tag: WidgetsViewCtrl.className);
-    Debug.info("WidgetsViewBindings.dependencies() [out]");
+    // Debug.info(("WidgetsViewBindings.dependencies() [out]");
   }
 }
 
 class WidgetsView extends GetView<WidgetsViewCtrl> {
   WidgetsView({super.key}) {
-    Debug.info("WidgetsView() [constructor])");
+    // Debug.info(("WidgetsView() [constructor])");
   }
 
   @override
   Widget build(BuildContext pCxt) {
-    Debug.info("WidgetsView.build(BuildContext)");
+    // Debug.info(("WidgetsView.build(BuildContext)");
 
 final WidgetsViewCtrl? controller = Get.isRegistered<WidgetsViewCtrl>(tag: WidgetsViewCtrl.className)
         ? Get.find<WidgetsViewCtrl>(tag: WidgetsViewCtrl.className)

@@ -11,7 +11,7 @@ import 'package:ld_wbench/02_tools/index.dart';
 class WidgetsViewData extends ViewData {
   // FUNCIONS ESTÀTIQUES --------------
   static WidgetsViewData createInstance({required String pTitle, required String pMsg, String? pErrorCode, String? pErrorMessage, Exception? pException}) {
-    Debug.info("WidgetsViewData.createInstance(ViewController, ...)");
+    // Debug.info(("WidgetsViewData.createInstance(ViewController, ...)");
   
     return WidgetsViewData(
       pTitle: pTitle,
@@ -30,7 +30,7 @@ class WidgetsViewData extends ViewData {
    required super.pMsg,
    super.pErrorCode, super.pErrorMessage,
    super.pException}) {
-    Debug.info("WidgetsViewData(title, msg, errorCode, errorMessage)");
+    // Debug.info(("WidgetsViewData(title, msg, errorCode, errorMessage)");
    }
   
   WidgetsViewData.fromStorage()
@@ -44,10 +44,10 @@ class WidgetsViewData extends ViewData {
   
   @override
   Future<void> loadData() async {
-    Debug.info("WidgetsViewData.loadData() async [1]");
+    // Debug.info(("WidgetsViewData.loadData() async [1]");
 
     if (!isNew) {
-      Debug.info("⚠️ Ja carregat, sortint.");
+      // Debug.info(("⚠️ Ja carregat, sortint.");
       return;
     }
 
@@ -59,19 +59,30 @@ class WidgetsViewData extends ViewData {
     ViewController ctrl = controller;
     Exception? exc;
 
-    Debug.info("WidgetsViewData.loadData() async [2]");
+    // Debug.info(("WidgetsViewData.loadData() async [2]");
     setPreparing(ctrl);
 
-    stLoadImage(FiFo<dynamic> pQueue, List<dynamic> pArgs) async {
+    stLoadImageA(FiFo<dynamic> pQueue, List<dynamic> pArgs) async {
       try {
-        await LdImageController.instance.loadImage("Add_Location", targetId: 2_000, icon: Icons.add_location, pWidth: 20.0.h, pHeight: 20.0.h);
+        await LdImageController.instance.loadImage("add_location", pTargetId: 2_000, pIcon: Icons.add_location, pWidth: 20.0.h, pHeight: 20.0.h);
         
+        stLoadImageB(FiFo<dynamic> pQueue, List<dynamic> pArgs) async {
+          try {
+            await LdImageController.instance.loadImage("align_vertical_bottom_outlined", pTargetId: 2_001, pIcon: Icons.align_vertical_bottom_outlined, pWidth: 20.0.h, pHeight: 20.0.h);
+            
+          } on Exception catch (pExc) {
+            exc = pExc;
+          }
+          return exc;
+        }
+        sneakFn(stLoadImageB);
+
       } on Exception catch (pExc) {
         exc = pExc;
       }
       return exc;
     }
-    await addFnNow(controller, stLoadImage);
+    sneakFn(stLoadImageA);
 
     setLoading(ctrl);
 
@@ -82,13 +93,13 @@ class WidgetsViewData extends ViewData {
       setLoaded(ctrl, pLExc.$2);
     });
 
-    Debug.info("WidgetsViewData.loadData() - Finalitzat correctament");
+    // Debug.info(("WidgetsViewData.loadData() - Finalitzat correctament");
   }
 
   // GETTERS i SETTERS ----------------
   @override
   ViewController get controller {
-    Debug.info("WidgetsViewData.controller [getter]");
+    // Debug.info(("WidgetsViewData.controller [getter]");
 
     if (!Get.isRegistered<WidgetsViewCtrl>(tag: WidgetsViewCtrl.className)) {
       Debug.error("⚠️ WidgetsViewCtrl encara no està registrat!", null);

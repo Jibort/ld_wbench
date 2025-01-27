@@ -52,7 +52,7 @@ class Debug {
     if (isNull(pLevel)) {
       Debug.error(pMsg, pExc);
     } else if (pLevel == levelInfo) {
-      Debug.info(pMsg);
+      // Debug.info((pMsg);
     } else if (pLevel == levelWarn) {
       Debug.warn(pMsg);
     }
@@ -62,7 +62,7 @@ class Debug {
     if (isNull(pLevel)) {
       Debug.error(pMsg, pExc);
     } else if (pLevel == levelInfo) {
-      Debug.info(pMsg);
+      // Debug.info((pMsg);
     } else if (pLevel == levelWarn) {
       Debug.warn(pMsg);
     }

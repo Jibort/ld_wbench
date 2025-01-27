@@ -34,15 +34,17 @@ class WidgetsViewCtrl extends ViewController {
       return LdButton(
           id: btnA,
           onPressed: () {
-            Debug.info("Butó Primary: PRÉS");
+            // Debug.info(("Butó Primary: PRÉS");
           },
           pLabel: 'Butó',
-          imageKey: "add_location",
+          // imageKey: "add_location",
+          ikey: "add_location",
+          iconData: Icons.add_location,
           isPrimary: true,
         );
     } catch (e, stack) {
-      Debug.info("ERROR construint LdButton A: $e");
-      Debug.info(stack.toString());
+      // Debug.info(("ERROR construint LdButton A: $e");
+      // Debug.info((stack.toString());
       return Text("Error carregant el botó A.");
     }
   }
@@ -56,18 +58,20 @@ Widget _buildSafeButtonB(BuildContext context) {
             themeProvider!.toggleTheme(); 
           },
           pLabel: 'Butó Secundari',
+          ikey: "align_vertical_bottom_outlined",
+          iconData: Icons.align_vertical_bottom_outlined,
           isPrimary: false,
         );
     } catch (e, stack) {
-      Debug.info("ERROR construint LdButton B: $e");
-      Debug.info(stack.toString());
+      // Debug.info(("ERROR construint LdButton B: $e");
+      // Debug.info((stack.toString());
       return Text("Error carregant el botó B.");
     }
   }
 
   @override
   Widget buildWidget(BuildContext pCxt) {
-    Debug.info("WidgetsViewCtrl.buildWidget(BuildContext)");
+    // Debug.info(("WidgetsViewCtrl.buildWidget(BuildContext)");
     
     WidgetsViewData data = super.state as WidgetsViewData;
     return BaseScaffold(
@@ -76,25 +80,8 @@ Widget _buildSafeButtonB(BuildContext context) {
       pViewCtrl: this,
       pBody: Center(
           child: Column(mainAxisSize: MainAxisSize.min, mainAxisAlignment: MainAxisAlignment.center, children: [
-        // LdButton(
-        //   id: 2_000,
-        //   onPressed: () {
-        //     Debug.info("Butó Primary: PRÉS");
-        //   },
-        //   pLabel: 'Butó',
-        //   imageKey: "add_location",
-        //   isPrimary: true,
-        // ),
         _buildSafeButtonA(pCxt),
         SizedBox(height: 15.0.h),
-        // LdButton(
-        //   id: 2_001,
-        //   onPressed: () { 
-        //     themeProvider!.toggleTheme(); 
-        //   },
-        //   pLabel: 'Butó Secundari',
-        //   isPrimary: false,
-        // ),
         _buildSafeButtonB(pCxt)
       ])),
     );
