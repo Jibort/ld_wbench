@@ -62,27 +62,41 @@ class WidgetsViewData extends ViewData {
     // Debug.info(("WidgetsViewData.loadData() async [2]");
     setPreparing(ctrl);
 
-    stLoadImageA(FiFo<dynamic> pQueue, List<dynamic> pArgs) async {
+    List<ImageAndSize> imgs = [
+      ImageAndSize(targetId: WidgetsViewCtrl.btnA, key: "add_location", source: Icons.add_location, width: 24.0.h, height: 24.0.h),
+      ImageAndSize(targetId: WidgetsViewCtrl.btnB, key: "align_vertical_bottom_outlined", source: Icons.align_vertical_bottom_outlined, width: 24.0.h, height: 24.0.h),
+      ImageAndSize(targetId: WidgetsViewCtrl.imgpd, key: "psicodex", source: "assets/images/psico_dex.png", width: 60.0.h, height: 60.0.h)
+    ];
+    
+    stLoadImages(FiFo<dynamic> pQueue, List<dynamic> pArgs) async {
       try {
-        await LdImageController.instance.loadImage("add_location", pTargetId: 2_000, pIcon: Icons.add_location, pWidth: 20.0.h, pHeight: 20.0.h);
-        
-        stLoadImageB(FiFo<dynamic> pQueue, List<dynamic> pArgs) async {
-          try {
-            await LdImageController.instance.loadImage("align_vertical_bottom_outlined", pTargetId: 2_001, pIcon: Icons.align_vertical_bottom_outlined, pWidth: 20.0.h, pHeight: 20.0.h);
-            
-          } on Exception catch (pExc) {
-            exc = pExc;
-          }
-          return exc;
-        }
-        sneakFn(stLoadImageB);
-
+        await LdImageController.instance.loadImages(this, imgs);
       } on Exception catch (pExc) {
+        Debug.error("⚠️ Error en loadImages():", pExc);
         exc = pExc;
       }
       return exc;
     }
-    sneakFn(stLoadImageA);
+    sneakFn(stLoadImages);
+
+    // stLoadImageA(FiFo<dynamic> pQueue, List<dynamic> pArgs) async {
+    //   try {
+    //     await LdImageController.instance.loadImage("add_location", pTargetId: 2_000, pIcon: Icons.add_location, pWidth: 20.0.h, pHeight: 20.0.h);
+    //     stLoadImageB(FiFo<dynamic> pQueue, List<dynamic> pArgs) async {
+    //       try {
+    //         await LdImageController.instance.loadImage("align_vertical_bottom_outlined", pTargetId: 2_001, pIcon: Icons.align_vertical_bottom_outlined, pWidth: 20.0.h, pHeight: 20.0.h);            
+    //       } on Exception catch (pExc) {
+    //         exc = pExc;
+    //       }
+    //       return exc;
+    //     }
+    //     sneakFn(stLoadImageB);
+    //   } on Exception catch (pExc) {
+    //     exc = pExc;
+    //   }
+    //   return exc;
+    // }
+    // sneakFn(stLoadImageA);
 
     setLoading(ctrl);
 

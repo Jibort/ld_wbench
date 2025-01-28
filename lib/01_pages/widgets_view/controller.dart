@@ -7,15 +7,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:ld_wbench/01_pages/01_01_view_tools/index.dart';
-import 'package:ld_wbench/02_tools/index.dart';
 import 'package:ld_wbench/05_widgets/index.dart';
 
 import 'data.dart';
 
 class WidgetsViewCtrl extends ViewController {
   static String get className => "WidgetsViewCtrl";
+  
+  // IDENTIFICADORS DE CAMPS ----------
   static int btnA = 2_000;
   static int btnB = 2_001;
+  static int imgpd = 2_002;
 
   // CONSTRUCTORS ---------------------
   WidgetsViewCtrl({required WidgetsViewData pState}):
@@ -25,7 +27,7 @@ class WidgetsViewCtrl extends ViewController {
     if (!Get.isRegistered<WidgetsViewCtrl>(tag: WidgetsViewCtrl.className)) {
       Get.put(this, tag: WidgetsViewCtrl.className);
     }
-    addWidgets([btnA, btnB]);
+    addWidgets([btnA, btnB, imgpd]);
   }
 
   // EXTENSIÓ DE 'ViewController' -----
@@ -42,7 +44,7 @@ class WidgetsViewCtrl extends ViewController {
           iconData: Icons.add_location,
           isPrimary: true,
         );
-    } catch (e, stack) {
+    } catch (e) {
       // Debug.info(("ERROR construint LdButton A: $e");
       // Debug.info((stack.toString());
       return Text("Error carregant el botó A.");
@@ -62,7 +64,7 @@ Widget _buildSafeButtonB(BuildContext context) {
           iconData: Icons.align_vertical_bottom_outlined,
           isPrimary: false,
         );
-    } catch (e, stack) {
+    } catch (e) {
       // Debug.info(("ERROR construint LdButton B: $e");
       // Debug.info((stack.toString());
       return Text("Error carregant el botó B.");
@@ -82,7 +84,9 @@ Widget _buildSafeButtonB(BuildContext context) {
           child: Column(mainAxisSize: MainAxisSize.min, mainAxisAlignment: MainAxisAlignment.center, children: [
         _buildSafeButtonA(pCxt),
         SizedBox(height: 15.0.h),
-        _buildSafeButtonB(pCxt)
+        _buildSafeButtonB(pCxt),
+        SizedBox(height: 30.0.h),
+        LdImage(id: imgpd, imageKey: "psicodex", width: 20.0.w, height: 20.0.h)
       ])),
     );
   }

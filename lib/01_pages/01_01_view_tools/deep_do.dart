@@ -17,12 +17,7 @@ typedef FnStep = Future<Exception?> Function(FiFo pQueue, List<dynamic> pArgs);
 typedef FnThen = Exception? Function(FiFo pQueue);
 Symbol empty = const Symbol("null");
 typedef FnPair = (FnStep, dynamic);
-typedef ViewDataConstructor = ViewData Function({
-    required String pTitle,
-    required String pMsg,
-    String? pErrorCode, String? pErrorMessage,
-    Exception? pException});
-    
+
 // Estats de la càrrega de dades per a la pàgina.
 enum LoadState {
   isNew,

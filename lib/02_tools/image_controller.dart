@@ -6,6 +6,8 @@ import "dart:ui" as ui;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ld_wbench/01_pages/01_01_view_tools/index.dart';
+import 'package:ld_wbench/02_tools/index.dart';
 
 import '../06_theme/app_theme.dart';
 
@@ -39,6 +41,13 @@ class LdImageController extends GetxController {
     // Debug.info(("LdImageController.getStoredImage() - Imatges actuals en _imageCache: ${_imgs.keys.toList()}");
 
     return _imgs[key];
+  }
+
+  void forgetImage(String pKey) {
+    Image? img = _imgs[pKey];
+    if (img != null) {
+      _imgs.remove(pKey);
+    }
   }
 
   Future<void> loadImage(
@@ -108,4 +117,29 @@ class LdImageController extends GetxController {
 
     return Image.memory(imageBytes, width: width, height: height);
   }
+
+  /// Aquesta funció simplifica la codificació per a la càrrega de una llissta d'imatges.
+  Future<void> loadImages(DeepDo pDo, List<ImageAndSize> pImgs) async {
+    for (var idx = 0; idx < pImgs.length; idx++) {
+      ImageAndSize img = pImgs[idx];
+      step(FiFo pQueue, List<dynamic> pArgs) async {
+        if (img.source is IconData) {
+          await loadImage(img.key, pTargetId: img.targetId, pIcon: img.source, pWidth: img.width, pHeight: img.height);
+        } else {
+          await loadImage(img.key, pTargetId: img.targetId, pAsset: img.source, pWidth: img.width, pHeight: img.height);
+        }      
+      }
+      pDo.sneakFn(step);
+    }
+  }
 }
+
+class ImageAndSize {
+  String key;
+  dynamic source;
+  double width, height;
+  int targetId;
+
+  ImageAndSize({required this.key, required this.source, required this.width, required this.height, required this.targetId});
+}
+

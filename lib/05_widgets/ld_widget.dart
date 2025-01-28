@@ -68,12 +68,13 @@ abstract class LdWidget extends StatelessWidget {
   // CONSTRUCCIÓ DEL WIDGET -----------
   @override
   Widget build(BuildContext context) {
+    bool showLabel = isVisible && runtimeType != LdButton && runtimeType != LdImage;
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (isVisible && runtimeType != LdButton) Text(label, style: txsLabelStyle(context)),
-        if (isVisible && runtimeType != LdButton) const SizedBox(height: 4),
+        if (showLabel) Text(label, style: txsLabelStyle(context)),
+        if (showLabel) const SizedBox(height: 4),
         if (isVisible) buildContent(context),
       ],
     );
