@@ -20,7 +20,6 @@ class LdButton extends LdWidget {
   final IconData? iconData; // 🔥 O una icona (IconData)
   final bool isPrimary;
   final bool isDanger;
-  final bool isDisabled;
 
   LdButton({
     super.key,
@@ -28,45 +27,36 @@ class LdButton extends LdWidget {
     required this.onPressed,
     required super.pLabel,
     this.ikey,
-    this.asset, // 🔥 Pot haver-hi un asset o no
-    this.iconData, // 🔥 Pot haver-hi una icona o no
+    this.asset,
+    this.iconData,
     this.isPrimary = true,
     this.isDanger = false,
-    this.isDisabled = false, 
+    super.isEnabled = true, 
   });
 
   @override
   Widget buildContent(BuildContext context) {
-    // Debug.info(("LdButton.buildContent() - Construint botó amb id: $id");
-
     return GetBuilder<LdImageController>(
-      id: id,  // 🔥 Assignem l'ID únic al GetBuilder
+      id: id,
       builder: (controller) {
-        // Debug.info(("LdButton.buildContent() - Construint botó amb imageKey: $asset");
-
         if (ikey == null) {
-          // Debug.info(("LdButton.buildContent() - ⚠️ No s'ha proporcionat cap clau d'imatge.");
           return _buildButton(context, null);
         }
 
         Image? img = controller.getStoredImage(ikey!);
         if (img == null) {
-          // Debug.info(("LdButton.buildContent() - ⚠️ La icona encara no està disponible: $asset");
-
-          // 🔥 Ara només actualitzem aquest botó quan la imatge estigui carregada
           controller.loadImage(
             ikey!,
-            pTargetId: id,
+            pTgts: [id],
             pAsset: asset,
             pIcon: iconData,
             pWidth: defIconWidth,
             pHeight: defIconHeight,
           );
 
-          return _buildButton(context, null); // Retornem el botó sense icona inicialment
+          return _buildButton(context, null);
         }
 
-        // Debug.info(("LdButton.buildContent() - ✅ Icona carregada per $asset");
         return _buildButton(context, img);
       },
     );
@@ -75,16 +65,16 @@ class LdButton extends LdWidget {
   /// 🔥 Mètode privat per encapsular la creació del botó
   Widget _buildButton(BuildContext context, Image? icon) {
     final theme = Theme.of(context);
-    final bgColor = isDisabled ? theme.colorScheme.surface.withValues(alpha: 0.5) :
+    final bgColor = !isEnabled ? theme.colorScheme.surface.withValues(alpha: 0.5) :
                         isDanger ? Colors.redAccent :
                         isPrimary ? theme.colorScheme.primary :
                         theme.colorScheme.secondary;
-    final fgColor = isDisabled ? Colors.grey :
+    final fgColor = !isEnabled ? Colors.grey :
                         isDanger || isPrimary ? theme.colorScheme.onPrimary :
                         theme.colorScheme.onSecondary;
 
     return ElevatedButton(
-      onPressed: isDisabled ? null : onPressed,
+      onPressed: isEnabled ? onPressed: null,
       style: ElevatedButton.styleFrom(
         backgroundColor: bgColor,
         foregroundColor: fgColor,

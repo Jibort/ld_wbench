@@ -52,7 +52,7 @@ class LdImageController extends GetxController {
 
   Future<void> loadImage(
     String pKey, {
-    int? pTargetId,
+    List<int>? pTgts,
     String? pAsset,
     IconData? pIcon,
     double? pWidth,
@@ -61,36 +61,26 @@ class LdImageController extends GetxController {
     pWidth ??= defIconWidth;
     pHeight??= defIconHeight;
       
-    // Debug.info(("LdImageController.loadImage() - Iniciant càrrega de: $pKey");
-
     if (pAsset != null) {
       try {
         _imgs[pKey] = Image.asset(pAsset, width: pWidth, height: pHeight);
-        // Debug.info(("LdImageController.loadImage() - ✅ Asset carregat: $pAsset");
       } catch (e) {
-        // Debug.info(("LdImageController.loadImage() - ❌ Error carregant asset $pAsset: $e");
         _imgs[pKey] = _imgs["No_Image"]!;
       }
     } else if (pIcon != null) {
       try {
         _imgs[pKey] = await _renderIconToImage(pIcon, pWidth, pHeight);
-        // Debug.info(("LdImageController.loadImage() - ✅ IconData convertit a imatge: $pKey");
       } catch (e) {
-        // Debug.info(("LdImageController.loadImage() - ❌ Error renderitzant IconData: $e");
         _imgs[pKey] = _imgs["No_Image"]!;
       }
     } else {
-      // Debug.info(("LdImageController.loadImage() - ❌ No s'ha especificat assetPath ni IconData.");
       _imgs[pKey] = _imgs["No_Image"]!;
     }
 
-    // Debug.info(("LdImageController.loadImage() - 📌 Imatges actuals en caché: ${_imgs.keys.toList()}");
-
-    // 🔥 Si targetId és nul, actualitzem tots els GetBuilder
-    if (pTargetId != null) {
-      update([pTargetId]); // Només actualitza el GetBuilder específic
+    if (pTgts != null && pTgts.isNotEmpty) {
+      update(pTgts);
     } else {
-      update(); // Si no hi ha un targetId, actualitza tota la UI
+      update();
     }
   }
 
@@ -124,9 +114,9 @@ class LdImageController extends GetxController {
       ImageAndSize img = pImgs[idx];
       step(FiFo pQueue, List<dynamic> pArgs) async {
         if (img.source is IconData) {
-          await loadImage(img.key, pTargetId: img.targetId, pIcon: img.source, pWidth: img.width, pHeight: img.height);
+          await loadImage(img.key, pTgts: img.tgts, pIcon: img.source, pWidth: img.width, pHeight: img.height);
         } else {
-          await loadImage(img.key, pTargetId: img.targetId, pAsset: img.source, pWidth: img.width, pHeight: img.height);
+          await loadImage(img.key, pTgts: img.tgts, pAsset: img.source, pWidth: img.width, pHeight: img.height);
         }      
       }
       pDo.sneakFn(step);
@@ -138,8 +128,8 @@ class ImageAndSize {
   String key;
   dynamic source;
   double width, height;
-  int targetId;
+  List<int> tgts;
 
-  ImageAndSize({required this.key, required this.source, required this.width, required this.height, required this.targetId});
+  ImageAndSize({required this.key, required this.source, required this.width, required this.height, required this.tgts});
 }
 

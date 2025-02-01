@@ -17,6 +17,14 @@ const Color lightSecondary = Color(0xFF48CAE4); // Blau secundary
 const Color lightSurface = Colors.white;
 const Color lightOnPrimary = Colors.white;
 const Color lightOnSecondary = Colors.black;
+const Color fontEnabled = Colors.black;
+const Color fontDisabled = Colors.grey;
+const Color fontHint = Colors.black12;
+const Color fontError = Colors.red;
+const Color fontWarning = Colors.yellow;
+const Color fontSuccess = Colors.green;
+const Color fontAccent = Colors.blue;
+const Color fontOnAccent = Colors.white;
 
 // TAMANYS DE FONT --------------------
 final double buttonFontSize = 12.0.h;
@@ -43,8 +51,9 @@ class LdTheme {
     ),
     
     textTheme: TextTheme(
-      bodyMedium: TextStyle(fontSize: 16, color: Colors.black),
-      titleLarge: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: lightPrimary),
+      bodySmall: TextStyle(fontSize: 10.0.h, color: Colors.black),
+      bodyMedium: TextStyle(fontSize: 12.0.h, color: Colors.black),
+      titleLarge: TextStyle(fontSize: 16.0.h, fontWeight: FontWeight.bold, color: lightPrimary),
     ),
     
     buttonTheme: ButtonThemeData(
@@ -70,9 +79,11 @@ class LdTheme {
     ),
     
     textTheme: TextTheme(
-      bodyMedium: TextStyle(fontSize: 16, color: Colors.white),
-      titleLarge: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF48CAE4)),
+      bodySmall: TextStyle(fontSize: 10.0.h, color: Colors.white),
+      bodyMedium: TextStyle(fontSize: 12.0.h, color: Colors.white),
+      titleLarge: TextStyle(fontSize: 16.0.h, fontWeight: FontWeight.bold, color: lightSecondary),
     ),
+    
     buttonTheme: ButtonThemeData(
       buttonColor: Color(0xFF48CAE4),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),

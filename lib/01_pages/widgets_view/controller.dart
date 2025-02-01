@@ -16,8 +16,9 @@ class WidgetsViewCtrl extends ViewController {
   
   // IDENTIFICADORS DE CAMPS ----------
   static int btnA = 2_000;
-  static int btnB = 2_001;
-  static int imgpd = 2_002;
+  static int btnB = btnA + 1;
+  static int imgpd = btnB + 1;
+  static int edtText = imgpd + 1;
 
   // CONSTRUCTORS ---------------------
   WidgetsViewCtrl({required WidgetsViewData pState}):
@@ -85,8 +86,10 @@ Widget _buildSafeButtonB(BuildContext context) {
         _buildSafeButtonA(pCxt),
         SizedBox(height: 15.0.h),
         _buildSafeButtonB(pCxt),
-        SizedBox(height: 30.0.h),
-        LdImage(id: imgpd, imageKey: "psicodex", width: 20.0.w, height: 20.0.h)
+        SizedBox(height: 15.0.h),
+        LdImage(id: imgpd, imageKey: "psicodex", width: 20.0.w, height: 20.0.h),
+        SizedBox(height: 15.0.h),
+        LdTextField(id: edtText, imageKey: "psicodex", hintText: "Escriu aquí el teu nom", pLabel: "Nom de pila" ),
       ])),
     );
   }

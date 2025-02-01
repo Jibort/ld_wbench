@@ -63,9 +63,9 @@ class WidgetsViewData extends ViewData {
     setPreparing(ctrl);
 
     List<ImageAndSize> imgs = [
-      ImageAndSize(targetId: WidgetsViewCtrl.btnA, key: "add_location", source: Icons.add_location, width: 24.0.h, height: 24.0.h),
-      ImageAndSize(targetId: WidgetsViewCtrl.btnB, key: "align_vertical_bottom_outlined", source: Icons.align_vertical_bottom_outlined, width: 24.0.h, height: 24.0.h),
-      ImageAndSize(targetId: WidgetsViewCtrl.imgpd, key: "psicodex", source: "assets/images/psico_dex.png", width: 60.0.h, height: 60.0.h)
+      ImageAndSize(tgts: [WidgetsViewCtrl.btnA], key: "add_location", source: Icons.add_location, width: 24.0.h, height: 24.0.h),
+      ImageAndSize(tgts: [WidgetsViewCtrl.btnB], key: "align_vertical_bottom_outlined", source: Icons.align_vertical_bottom_outlined, width: 24.0.h, height: 24.0.h),
+      ImageAndSize(tgts: [WidgetsViewCtrl.imgpd, WidgetsViewCtrl.edtText], key: "psicodex", source: "assets/images/psico_dex.png", width: 60.0.h, height: 60.0.h)
     ];
     
     stLoadImages(FiFo<dynamic> pQueue, List<dynamic> pArgs) async {
