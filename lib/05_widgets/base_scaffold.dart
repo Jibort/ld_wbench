@@ -36,7 +36,7 @@ class BaseScaffold extends Scaffold {
               pLeading: pLeading,
               pViewCtrl: pViewCtrl,
               pActions: [
-                LdActionIcon(id: 2_002, onPressed: () { 
+                LdActionIcon(id: 2_002, bCxt: pViewCtrl, onPressed: () { 
                   
                 }, 
               )],

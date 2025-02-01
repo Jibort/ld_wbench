@@ -19,11 +19,13 @@ export "data.dart";
 class WidgetsViewBindings extends Bindings {
   @override
   void dependencies() {
-    // Debug.info(("WidgetsViewBindings.dependencies() [in]");
-    WidgetsViewData data = WidgetsViewData(pTitle: "CiewTitle", pMsg: "");
+    Debug.info("WidgetsViewBindings.dependencies() [in]");
+    WidgetsViewData data = WidgetsViewData(pTitle: "ViewTitle", pMsg: "");
      Get.put(WidgetsViewCtrl(pState: data), tag: WidgetsViewCtrl.className, permanent: false);
     // Get.put(WidgetsViewCtrl(pState: data), tag: WidgetsViewCtrl.className);
-    // Debug.info(("WidgetsViewBindings.dependencies() [out]");
+    Debug.info("Controladors registrats: ${Get.keys}");
+    Debug.info("Controller Registrat?: ${Get.isRegistered(tag: WidgetsViewCtrl.className)}");
+    Debug.info("WidgetsViewBindings.dependencies() [out]");
   }
 }
 

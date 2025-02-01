@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:ld_wbench/01_pages/01_01_view_tools/index.dart';
 import 'package:ld_wbench/01_pages/widgets_view/view.dart';
 import 'package:ld_wbench/02_tools/index.dart';
+import 'package:ld_wbench/06_theme/app_theme.dart';
 
 class WidgetsViewData extends ViewData {
   // FUNCIONS ESTÀTIQUES --------------
@@ -63,9 +64,11 @@ class WidgetsViewData extends ViewData {
     setPreparing(ctrl);
 
     List<ImageAndSize> imgs = [
+      ImageAndSize(tgts: [WidgetsViewCtrl.edtText], key: "icon_edit_icon", source: Icons.account_tree_outlined, width: 24.0.h, height: 24.0.h),
       ImageAndSize(tgts: [WidgetsViewCtrl.btnA], key: "add_location", source: Icons.add_location, width: 24.0.h, height: 24.0.h),
       ImageAndSize(tgts: [WidgetsViewCtrl.btnB], key: "align_vertical_bottom_outlined", source: Icons.align_vertical_bottom_outlined, width: 24.0.h, height: 24.0.h),
-      ImageAndSize(tgts: [WidgetsViewCtrl.imgpd, WidgetsViewCtrl.edtText], key: "psicodex", source: "assets/images/psico_dex.png", width: 60.0.h, height: 60.0.h)
+      ImageAndSize(tgts: [WidgetsViewCtrl.imgpd], key: "psicodex", source: "assets/images/psico_dex.png", width: 60.0.h, height: 60.0.h),
+      ImageAndSize(tgts: [WidgetsViewCtrl.imgpd], key: "psicodex_2", source: "assets/images/psico_dex.png", width: defIconWidth, height: defIconHeight),
     ];
     
     stLoadImages(FiFo<dynamic> pQueue, List<dynamic> pArgs) async {

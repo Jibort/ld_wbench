@@ -23,6 +23,7 @@ class LdActionIcon extends LdWidget {
   LdActionIcon({
     super.key,
     required super.id,
+    required super.bCxt,
     super.pLabel,
     required this.onPressed,
     this.icon,

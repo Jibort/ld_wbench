@@ -24,6 +24,7 @@ class LdButton extends LdWidget {
   LdButton({
     super.key,
     required super.id,
+    required super.bCxt,
     required this.onPressed,
     required super.pLabel,
     this.ikey,
@@ -72,6 +73,7 @@ class LdButton extends LdWidget {
     final fgColor = !isEnabled ? Colors.grey :
                         isDanger || isPrimary ? theme.colorScheme.onPrimary :
                         theme.colorScheme.onSecondary;
+    LdImageController inst = LdImageController.instance;
 
     return ElevatedButton(
       onPressed: isEnabled ? onPressed: null,

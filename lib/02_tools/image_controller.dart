@@ -36,11 +36,41 @@ class LdImageController extends GetxController {
     // Debug.info(("LdImageController.onInit() - Imatges disponibles: ${_imgs.keys.toList()}");
   }
 
-  Image? getStoredImage(String key) {
+  bool exists(String? pKey) {
+    return pKey != null && _imgs.containsKey(pKey);
+  }
+
+  Image? getStoredImage(String? key) {
     // Debug.info(("LdImageController.getStoredImage() - Buscant imatge: $key");
     // Debug.info(("LdImageController.getStoredImage() - Imatges actuals en _imageCache: ${_imgs.keys.toList()}");
 
-    return _imgs[key];
+    return key != null ? _imgs[key] ?? _imgs[No_Image]: _imgs[No_Image];
+  }
+
+  ColorFiltered getFilteredImage({String? pKey, bool pIsEnabled = true, bool pIsFocused = false, Color? pColor}) {
+    Image? img = getStoredImage(pKey);
+    if (pColor == null) {
+        final theme = Theme.of(Get.context!);
+        // final fgColor = !pIsEnabled ? Colors.grey :
+        //                 isDanger || isPrimary ? theme.colorScheme.onPrimary :
+        //                 theme.colorScheme.onSecondary;
+        pColor = !pIsEnabled 
+          ? Colors.grey
+          : pIsFocused
+            ?  theme.colorScheme.primary
+            : theme.colorScheme.onSecondary;
+      }
+
+    if (img != null) {
+      return ColorFiltered(
+        colorFilter: ColorFilter.mode(pColor, BlendMode.srcIn),
+        child: img,
+      );
+    }
+    return ColorFiltered(
+        colorFilter: ColorFilter.mode(pColor, BlendMode.srcIn),
+        child: _imgs["No_Image"]!,
+      );
   }
 
   void forgetImage(String pKey) {
@@ -114,12 +144,15 @@ class LdImageController extends GetxController {
       ImageAndSize img = pImgs[idx];
       step(FiFo pQueue, List<dynamic> pArgs) async {
         if (img.source is IconData) {
+          Debug.info("Demanant l'icona de: ${img.key} (${img.source})");
           await loadImage(img.key, pTgts: img.tgts, pIcon: img.source, pWidth: img.width, pHeight: img.height);
         } else {
+          Debug.info("Demanant la imatge de: ${img.key} (${img.source})");
           await loadImage(img.key, pTgts: img.tgts, pAsset: img.source, pWidth: img.width, pHeight: img.height);
         }      
       }
-      pDo.sneakFn(step);
+      pDo.addFn(step);
+      // pDo.sneakFn(step);
     }
   }
 }

@@ -61,20 +61,25 @@ TextStyle txsAppBarProgressionSubtitleStyle({required BuildContext pCxt, Color? 
 TextStyle txsLabelStyle({
   required BuildContext pCxt,
   bool pIsEnabled = true, 
-  bool pFocused =  false, 
+  bool pIsFocused =  false, 
   bool pIsError = false}) {
+    ThemeData theme = Theme.of(pCxt);
     return TextStyle(
-      fontWeight: (pFocused)? FontWeight.bold: FontWeight.normal,
-      fontSize: 14.h,
+      fontWeight: (pIsFocused)? FontWeight.bold: FontWeight.normal,
+      fontSize: 17.h,
       fontStyle: (pIsEnabled)
-        ? (pFocused)
+        ? (pIsFocused)
           ? FontStyle.normal
           : FontStyle.italic
         : FontStyle.normal,
       backgroundColor: Colors.transparent,
-      color: (pIsEnabled)
-        ? Theme.of(pCxt).primaryColor
-        : Theme.of(pCxt).disabledColor,
+      color: (!pIsEnabled)
+        ? theme.disabledColor
+        : (pIsFocused)
+          ? theme.colorScheme.primary
+          : (pIsError)
+            ? theme.colorScheme.error
+            : theme.colorScheme.onSecondary,
       fontFamily: 'Roboto',
     );
 }

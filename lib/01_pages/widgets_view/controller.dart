@@ -32,10 +32,11 @@ class WidgetsViewCtrl extends ViewController {
   }
 
   // EXTENSIÓ DE 'ViewController' -----
-  Widget _buildSafeButtonA(BuildContext context) {
+Widget _buildSafeButtonA(BuildContext context) {
     try {
       return LdButton(
           id: btnA,
+          bCxt: this,
           onPressed: () {
             // Debug.info(("Butó Primary: PRÉS");
           },
@@ -56,8 +57,9 @@ Widget _buildSafeButtonB(BuildContext context) {
     try {
       return LdButton(
           id: btnB,
+          bCxt: this,
           onPressed: () { 
-            notify(pTargets: [btnA]);
+            notify(pTargets: [btnA, edtText]);
             themeProvider!.toggleTheme(); 
           },
           pLabel: 'Butó Secundari',
@@ -87,9 +89,9 @@ Widget _buildSafeButtonB(BuildContext context) {
         SizedBox(height: 15.0.h),
         _buildSafeButtonB(pCxt),
         SizedBox(height: 15.0.h),
-        LdImage(id: imgpd, imageKey: "psicodex", width: 20.0.w, height: 20.0.h),
+        LdImage(id: imgpd, bCxt: this, imageKey: "psicodex", width: 20.0.w, height: 20.0.h), //"icon_edit_icon"
         SizedBox(height: 15.0.h),
-        LdTextField(id: edtText, imageKey: "psicodex", hintText: "Escriu aquí el teu nom", pLabel: "Nom de pila" ),
+        LdTextField(id: edtText, bCxt: this, imageKey: "psicodex_2", pLabel: "Nom de pila"), // "icon_edit_icon"
       ])),
     );
   }

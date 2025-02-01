@@ -14,17 +14,30 @@ class LdImage extends LdWidget {
   final double height;
 
   // CONSTRUCTORS ---------------------
-  LdImage({required super.id, super.key, required this.imageKey, this.width = 24.0, this.height = 24.0});
+  LdImage({required super.id, super.key, required super.bCxt, required this.imageKey, this.width = 24.0, this.height = 24.0});
 
   // OVERRIDES ------------------------  
   @override
   Widget buildContent(BuildContext context) {
+    // final theme = Theme.of(context);
+    // final fgColor = !isEnabled 
+    // ? Colors.grey
+    // : isFocused
+    //   ?  theme.colorScheme.primary
+    //   : theme.colorScheme.onSecondary;
+
     return GetBuilder<LdImageController>(
       id: id,
       tag: imageKey,
       init: LdImageController.instance,
       builder: (controller) {
-        return controller.getStoredImage(imageKey) ?? Image.asset("assets/No_Image.png", width: width, height: height);
+        return ColorFiltered(
+              colorFilter: ColorFilter.mode(
+                focusNode.hasFocus 
+                  ? Colors.orange //Theme.of(context).dividerColor
+                  : Colors.green[500]!, // fgColor, 
+                BlendMode.srcIn),
+              child: controller.getStoredImage(imageKey) ?? Image.asset("assets/No_Image.png", width: width, height: height));
       },
     );
   }

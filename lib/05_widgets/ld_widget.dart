@@ -4,6 +4,8 @@
 // ignore_for_file: prefer_final_fields, must_be_immutable, avoid_renaming_method_parameters
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:ld_wbench/01_pages/01_01_view_tools/index.dart';
 import 'package:ld_wbench/02_tools/index.dart';
 import 'package:ld_wbench/05_widgets/index.dart';
 
@@ -15,9 +17,9 @@ abstract class LdWidget extends StatelessWidget {
   bool isEnabled = true;       // Determina si el widget pot set ocupat pel focus.
   bool isMandatory = false;    // Determina si el widget és de compliment obligatori.
   bool isVisible = true;       // Determina si el widget és visible.
-  final FocusNode? focusNode;  // Gestor del focus pel widget.
+  final FocusNode focusNode;   // Gestor del focus pel widget.
   OnWiddgetTapCallback? opTap; // Funció per a actuar davant el 'tap' sobre el widget, tot i que suporta altres widgets. 
-
+  ViewController bCxt;         // Control·lador del widget. 
   // final BaseController bCtrl;
 
 //  CONSTRUCTORS ----------------------
@@ -25,35 +27,35 @@ abstract class LdWidget extends StatelessWidget {
     super.key,
     required this.id,
     String? pLabel,
+    required this.bCxt,
     this.errorMessage,
     this.isEnabled = true,
     this.isMandatory = false,
     this.isVisible = true,
-    this.focusNode,
+    FocusNode? pFocusNode,
     this.opTap,
-  }): label = pLabel ?? "?";
+  }): label = pLabel ?? "?", focusNode = pFocusNode ?? FocusNode();
 
   // Gestió d'estils segons l'estat
   Color getBorderColor(BuildContext context) {
     if (!isEnabled) return Colors.grey;
     if (errorMessage != null) return Colors.red;
-    return (focusNode?.hasFocus ?? false)
+    return (focusNode.hasFocus)
         ? Theme.of(context).primaryColor
         : Theme.of(context).dividerColor;
   }
 
   TextStyle txsLabelStyle(BuildContext context) {
-    final color = errorMessage != null
-        ? Colors.red
-        : isEnabled
-            ? (focusNode?.hasFocus ?? false
-                ? Theme.of(context).primaryColor
-                : Theme.of(context).hintColor)
-            : Colors.grey;
-
     return TextStyle(
-      color: color,
-      fontWeight: focusNode?.hasFocus ?? false ? FontWeight.bold : FontWeight.normal,
+      fontWeight: focusNode.hasFocus? FontWeight.bold : FontWeight.normal,
+      fontSize: 16.0.h,
+    );
+  }
+
+  TextStyle txsEditStyle(BuildContext context) {
+    return TextStyle(
+      fontWeight: FontWeight.normal,
+      fontSize: 16.0.h,
     );
   }
 
@@ -68,7 +70,7 @@ abstract class LdWidget extends StatelessWidget {
   // CONSTRUCCIÓ DEL WIDGET -----------
   @override
   Widget build(BuildContext context) {
-    bool showLabel = isVisible && runtimeType != LdButton && runtimeType != LdImage;
+    bool showLabel = isVisible && runtimeType != LdButton && runtimeType != LdImage && runtimeType != LdTextField;
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -84,8 +86,7 @@ abstract class LdWidget extends StatelessWidget {
   int? getId() => id;
 
   // Retorna cert només en cas que el widget tingui el focus.
-  bool isFocused() { return (focusNode?.hasFocus)?? false; }
-
+  bool get isFocused =>  focusNode.hasFocus;
 
   // Estableix la funció per a informar sobre el 'tap' al widget.
   set onTap(OnWiddgetTapCallback? pOnTap) => onTap = pOnTap;
