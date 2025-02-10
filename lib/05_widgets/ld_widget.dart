@@ -5,49 +5,52 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:ld_wbench/01_pages/01_01_view_tools/index.dart';
 import 'package:ld_wbench/02_tools/index.dart';
 import 'package:ld_wbench/05_widgets/index.dart';
 
 abstract class LdWidget extends StatelessWidget {
-  // MEMBRES DE TOTS ELS WIDGETS ------
-  final int id;                // Identificador numéric únic que tenen tots els widgets.
-  final String label;          // Etiqueta localitzada del widget.
-  final String? errorMessage;  // En cas d'ocòrrer un error aquest és el missatge que li correspon.
-  bool isEnabled = true;       // Determina si el widget pot set ocupat pel focus.
-  bool isMandatory = false;    // Determina si el widget és de compliment obligatori.
-  bool isVisible = true;       // Determina si el widget és visible.
-  final FocusNode focusNode;   // Gestor del focus pel widget.
-  OnWiddgetTapCallback? opTap; // Funció per a actuar davant el 'tap' sobre el widget, tot i que suporta altres widgets. 
-  ViewController bCxt;         // Control·lador del widget. 
-  // final BaseController bCtrl;
+  // MEMBRES --------------------------
+  final LdWidgetController _wCtrl; // Control·lador del widget. 
+  final LdViewController   _vCtrl; // Control·lador de la vista on es troba el widget.
 
 //  CONSTRUCTORS ----------------------
-  LdWidget({
-    super.key,
-    required this.id,
-    String? pLabel,
-    required this.bCxt,
-    this.errorMessage,
-    this.isEnabled = true,
-    this.isMandatory = false,
-    this.isVisible = true,
-    FocusNode? pFocusNode,
-    this.opTap,
-  }): label = pLabel ?? "?", focusNode = pFocusNode ?? FocusNode();
+  LdWidget({super.key,  required LdWidgetController pWCtrl})
+  : _wCtrl = pWCtrl, _vCtrl = pWCtrl.vCtrl;
 
+  // GETTERS/SETTERS -------------------
+  String  get label        => _wCtrl.label;
+  int?    get errorCode    => _wCtrl.errorCode;
+  String? get errorMessage => _wCtrl.errorMessage;
+  bool    get isError      => _wCtrl.errorCode != null;
+  bool    get isEnabled    => _wCtrl.isEnabled;
+  bool    get isMandatory  => _wCtrl.isMandatory;
+  bool    get isVisible    => _wCtrl.isVisible;
+  bool    get isPrimary    => _wCtrl.isPrimary;
+  FocusNode get focusNode  => _wCtrl.focusNode;
+  bool    get hasFocus     => _wCtrl.hasFocus;
+  LdWidgetController get wCtrl => _wCtrl;
+  LdViewController get vCtrl => _vCtrl;
+
+  set label(String pLabel)                => _wCtrl.label = pLabel;
+  set errorCode(int? pErrorCode)          => _wCtrl.errorCode = pErrorCode;
+  set errorMessage(String? pErrorMessage) => _wCtrl.errorMessage = pErrorMessage;
+  set setEnabled(bool pIsEnabled)         => _wCtrl.isEnabled = pIsEnabled;
+  set setVisible(bool pIsVisible)         => _wCtrl.isVisible = pIsVisible;
+  set setMandatory(bool pIsMandatory)     => _wCtrl.isMandatory = pIsMandatory;
+  set setPrimary(bool pIsPrimary)         => _wCtrl.isPrimary  = pIsPrimary;
+  
   // Gestió d'estils segons l'estat
   Color getBorderColor(BuildContext context) {
     if (!isEnabled) return Colors.grey;
     if (errorMessage != null) return Colors.red;
-    return (focusNode.hasFocus)
-        ? Theme.of(context).primaryColor
+    return (hasFocus)
+        ? Theme.of(context).colorScheme.surface
         : Theme.of(context).dividerColor;
   }
 
   TextStyle txsLabelStyle(BuildContext context) {
     return TextStyle(
-      fontWeight: focusNode.hasFocus? FontWeight.bold : FontWeight.normal,
+      fontWeight: hasFocus? FontWeight.bold : FontWeight.normal,
       fontSize: 16.0.h,
     );
   }
@@ -63,31 +66,27 @@ abstract class LdWidget extends StatelessWidget {
   // Contingut específic del widget fill
   Widget buildContent(BuildContext context);
 
-  // Neteja de recursos del widget
-  void dispose();
-  
-
   // CONSTRUCCIÓ DEL WIDGET -----------
   @override
   Widget build(BuildContext context) {
     bool showLabel = isVisible && runtimeType != LdButton && runtimeType != LdImage && runtimeType != LdTextField;
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        if (showLabel) Text(label, style: txsLabelStyle(context)),
-        if (showLabel) const SizedBox(height: 4),
-        if (isVisible) buildContent(context),
-      ],
+    return Container(
+      padding: EdgeInsets.only(left: 15.0.h, right: 15.0.h, top: 20.0.h),
+      child : Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (showLabel) Text(label, style: txsLabelStyle(context)),
+          if (showLabel) const SizedBox(height: 4),
+          if (isVisible) buildContent(context),
+        ],
+      )
     );
   }
 
-  // Retorna l'identificador únic del widget.
-  int? getId() => id;
-
-  // Retorna cert només en cas que el widget tingui el focus.
-  bool get isFocused =>  focusNode.hasFocus;
-
-  // Estableix la funció per a informar sobre el 'tap' al widget.
-  set onTap(OnWiddgetTapCallback? pOnTap) => onTap = pOnTap;
+  // FUNCIONALITAT XCTRL --------------
+  XCtrl get xCtrl => _wCtrl.xCtrl;
+  String get id => _wCtrl.id;
+  String get typeName => _wCtrl.type.toString();  
+  String get tag => _wCtrl.tag;
 }

@@ -2,7 +2,6 @@
 // @createdAt: 2024-06-21 dv: JIQ
 
 import 'package:flutter/foundation.dart';
-
 import 'null_mang.dart';
 
 const levelInfo = -1;
@@ -52,7 +51,7 @@ class Debug {
     if (isNull(pLevel)) {
       Debug.error(pMsg, pExc);
     } else if (pLevel == levelInfo) {
-      // Debug.info((pMsg);
+      // Debug.debug(1, (pMsg);
     } else if (pLevel == levelWarn) {
       Debug.warn(pMsg);
     }
@@ -62,7 +61,7 @@ class Debug {
     if (isNull(pLevel)) {
       Debug.error(pMsg, pExc);
     } else if (pLevel == levelInfo) {
-      // Debug.info((pMsg);
+      // Debug.debug(1, (pMsg);
     } else if (pLevel == levelWarn) {
       Debug.warn(pMsg);
     }

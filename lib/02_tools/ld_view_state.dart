@@ -1,29 +1,27 @@
 // Classe magatzem general per a vistes.
 // CreatedAt: 2025/01/18 ds. JIQ
 
+import 'package:flutter/foundation.dart';
 import 'package:ld_wbench/01_pages/01_01_view_tools/index.dart';
+import 'package:ld_wbench/02_tools/index.dart';
 
-abstract class ViewData extends DeepDo {
+abstract class LdViewState extends DeepDo {
   // MEMBRES --------------------------
-  // Estat de la càrrega de la pàgina.
-  LoadState _loadState = LoadState.isNew;
-
-  // Comptador de càrregues de dades.
-  int _loadCounter = 0;
-  
+  LoadState _loadState = LoadState.isNew; // Estat de la càrrega de la pàgina.
+  int _loadCounter = 0;                   // Contador de càrregues.
   bool clock = false;
   Exception? _exception;
+  late final LdViewController _viewCtrl;  // Controlador de la vista.
 
   // Dades genèriques de les vistes.
-  late final String _title;
+  late final String  _title;
   late final String? _message;
   late final String? _errorCode;
   late final String? _errorMessage;
 
   // CONSTRUCTORS ---------------------
-  ViewData({
-   required String pTitle,
-   required String pMsg,
+  LdViewState({
+   required String pTitle, required String pMsg,
    String? pErrorCode, String? pErrorMessage,
    Exception? pException}):
     _title = pTitle,
@@ -32,7 +30,7 @@ abstract class ViewData extends DeepDo {
     _errorMessage = pErrorMessage,
     _exception = pException,
     super(null) {
-      // Debug.info(("ViewData(...) [constructor]");
+      // Debug.debug(1, ("ViewData(...) [constructor]");
   }
 
   // GETTERS i SETTERS ----------------
@@ -43,7 +41,8 @@ abstract class ViewData extends DeepDo {
   Exception? get exception => _exception;
 
   // Retorna el controllador de les dades de la vista.
-  ViewController get controller;
+  LdViewController get viewCtrl => _viewCtrl;
+  set viewCtrl(LdViewController pVCtrl) => _viewCtrl = pVCtrl;
 
   // Retorna el número de cops que s'ha executat la càrrega.
   int get loadCounter => _loadCounter;
@@ -77,63 +76,63 @@ abstract class ViewData extends DeepDo {
   bool get isError => (_loadState == LoadState.isError);
 
 // Estableix que la càrrega s'està preparant.
-  void setPreparing(ViewController pCtrl) {
+  void setPreparing() {
     _loadState = (_loadCounter == 0) ? LoadState.isPreparing : LoadState.isPreparingAgain;
-    pCtrl.notify(pTargets: [WidgetKey.appBar.idx, WidgetKey.appBarProgress.idx]);
+    _viewCtrl.notify(pTgts: [WidgetKey.appBar.idx, WidgetKey.appBarProgress.idx]);
   }
 
   // Estableix que la càrrega s'està executant.
-  void setLoading(ViewController pCtrl) {
+  void setLoading() {
     _loadState = (_loadCounter == 0) ? LoadState.isLoading : LoadState.isLoadingAgain;
-    pCtrl.notify(pTargets: [WidgetKey.appBar.idx, WidgetKey.appBarProgress.idx]);
+    _viewCtrl.notify(pTgts: [WidgetKey.appBar.idx, WidgetKey.appBarProgress.idx]);
   }
 
   // EINES DE CÀRREGA -----------------
   // Carrega les dades de la vista on es trobi.
+  @mustCallSuper
   void loadData();
   
   
   // Estableix que la càrrega s'ha completat.
-  void setLoaded(ViewController pCtrl, Exception? pExc) {
+  void setLoaded(Exception? pExc) {
     _exception = pExc;
 
     _loadState = LoadState.isLoaded;
     _loadCounter += 1;
-    pCtrl.notify();
+    _viewCtrl.notify();
   }
 
   // Estableix que la càrrega s'està tornant a preparar.
-  void setPreparingAgain(ViewController pCtrl) {
+  void setPreparingAgain() {
     _loadState = LoadState.isPreparingAgain;
-    pCtrl.notify(pTargets: [WidgetKey.appBar.idx, WidgetKey.appBarProgress.idx]);
+    viewCtrl.notify(pTgts: [WidgetKey.appBar.idx, WidgetKey.appBarProgress.idx]);
   }
 
   // Estableix que la càrrega s'està tornant a executar.
-  void setLoadingAgain(ViewController pCtrl) {
+  void setLoadingAgain() {
     _loadState = LoadState.isLoadingAgain;
-    pCtrl.notify(pTargets: [WidgetKey.appBar.idx, WidgetKey.appBarProgress.idx]);
+    _viewCtrl.notify(pTgts: [WidgetKey.appBar.idx, WidgetKey.appBarProgress.idx]);
   }
 
   // Estableix que la càrrega s'ha completat amb error.
   void setException(
-   ViewController pCtrl,
    String? pError, String? pErrorMessage,
    Exception pExc) {
     _exception = pExc;
     _loadState = LoadState.isError;
     _errorCode = pError;
     _errorMessage = pErrorMessage;
-    pCtrl.notify();
+    _viewCtrl.notify();
   }
 
   // Reinicia l'estat original de càrrega.
-  void dataReset(ViewController pCtrl) {
+  void dataReset() {
     super.reset();
     _exception = null;
     _loadState = LoadState.isNew;
     _loadCounter = 0;
     loadData();
-    pCtrl.notify();
+    _viewCtrl.notify();
   }
 }
 

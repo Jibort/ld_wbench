@@ -4,99 +4,143 @@
 // ignore_for_file: must_be_immutable, avoid_renaming_method_parameters, avoid_init_to_null, prefer_final_fields
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
-import 'package:ld_wbench/01_pages/01_01_view_tools/index.dart';
 import 'package:ld_wbench/02_tools/index.dart';
 import 'package:ld_wbench/05_widgets/index.dart';
 import 'package:ld_wbench/06_theme/app_theme.dart';
 
 class LdTextField extends LdWidget {
-  final TextEditingController controller;
-  final String hintText;
+  // MEMBRES --------------------------
+  final TextEditingController txtCtrl;
+  dynamic imgId;
+  Image?  img;
+  final String? hintText;
   final bool obscureText;
-  final String? imageKey; // Imatge a la part esquerra
-  final String? asset; // 🔥 Ara podem passar una imatge (LdImage)
-  final IconData? iconData; // 🔥 O una icona (IconData)
   
+  // MEMBRES AUXILIARS ----------------
+  bool _focus = false;
 
   LdTextField({
     super.key,
-    super.pLabel,
-    required super.id, 
-    required super.bCxt,
+    String? pId,
+    this.imgId,
+    String  pLabel = '',
     dynamic pText,
-    this.hintText = '',
-    this.imageKey,
-    this.asset,
-    this.iconData,
-    this.obscureText = false,
-  }): controller = (pText == null)
+    int?    pErrorCode,
+    String? pErrorMessage,
+    bool pIsEnabled = true, 
+    bool pIsMandatory = false, 
+    bool pIsVisible = true,
+    bool pIsPrimary = true,
+    this.hintText, 
+    this.obscureText = false, 
+    FocusNode? pFocusNode,
+    VoidCallback? pOnPressed,
+    required LdViewController pVCtrl,
+  }): txtCtrl = (pText == null)
     ? TextEditingController()
-    : (pText is TextEditingController)? pText: TextEditingController(text: pText.toString()) {
-    focusNode.addListener(() {
-      bCxt.notify(pTargets: [id]);  
+    : (pText is TextEditingController)? pText: TextEditingController(text: pText.toString()),
+    super(pWCtrl: LdWidgetController(
+    pId: pId, pLabel: pLabel,
+    pErrorCode: pErrorCode, pErrorMessage: pErrorMessage,
+    pIsEnabled: pIsEnabled, pIsMandatory: pIsMandatory, 
+    pIsVisible: pIsVisible, pIsPrimary: pIsPrimary,
+    pVCtrl: pVCtrl, pOnPressed: pOnPressed,
+    )) {
+    wCtrl.focusNode.addListener(() {
+      SchedulerBinding.instance.addPostFrameCallback((_) { // ⚠️ Evita crides innecessàries
+        Debug.debug(1, "FocusNode.listener: before[${xCtrl.id}] = ${focusNode.hasFocus}");
+        _focus = !_focus;
+        wCtrl.update([{xCtrl.id}]); 
+        Debug.debug(1, "FocusNode.listener: after[${xCtrl.id}] = ${focusNode.hasFocus}");
+      });
     });
   }
+ 
 
-Widget _buildEditField(BuildContext context, Image? icon) {
-  LdImageController inst = LdImageController.instance;
-  return Container(
-    padding: EdgeInsets.only(left: 5.0.h, right: 5.0.h, top: 15.0.h),
-    child: TextField(
+  Widget _buildEditField(BuildContext pCxt, Image? pImage) {
+    // Debug.debug(1, "LdTextField._buildEditField: ${xCtrl.id}");
+    // Debug.debug(1, " /// isEnabled?[${xCtrl.id}]: $isEnabled");
+    // Debug.debug(1, " /// isFocused?[${xCtrl.id}]: $hasFocus");
+    // Debug.debug(1, " /// isVisible?[${xCtrl.id}]: $isVisible");
+
+    LdImageController inst = LdImageController.inst;
+    ThemeData theme = Theme.of(pCxt);
+    // Color borderColor = theme.inputDecorationTheme.border?.borderSide.color ?? getBorderColor(pCxt);
+    InputDecorationTheme inputTheme = theme.inputDecorationTheme;
+
+    return TextField(
         focusNode: focusNode,
-        controller: controller,
+        controller: txtCtrl,
         obscureText: obscureText,
-        style: txsEditStyle(context),
+        style: txsEditStyle(pCxt),
         decoration: InputDecoration(
-          isDense: true,
-          contentPadding: EdgeInsets.only(left: 10.0.h, right: 5.0.h, top: 10.0.h, bottom: 10.0.h),
           labelText: label,
-          labelStyle: txsLabelStyle(pIsFocused: isFocused, pIsEnabled: isEnabled, pIsError: errorMessage != null, pCxt: context),
-          prefixIcon: (inst.exists(imageKey))
-            ? inst.getFilteredImage(pKey: imageKey, pIsEnabled: isEnabled, pIsFocused: isFocused)
-            : null,
           hintText: hintText,
-           border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
-            borderSide: BorderSide(color: getBorderColor(context)),
+          prefixIconColor: hasFocus
+              ? Colors.green.shade700 // inputTheme.border!.borderSide.color
+              : isEnabled
+                ? Colors.orange.shade700
+                : Colors.yellow.shade500,// theme.textTheme.bodyMedium!.color,
+          labelStyle: inputTheme.labelStyle!.copyWith(
+            backgroundColor: Colors.white,
+            color:
+            hasFocus
+              ? inputTheme.border!.borderSide.color
+              : isEnabled
+                ? inputTheme.labelStyle!.color
+                : theme.textTheme.bodyMedium!.color,
           ),
+          prefixIcon: (inst.exists(imgId))
+            ? inst.getFilteredImage(
+                pKey: imgId, 
+                pIsEnabled: isEnabled, 
+                pHasFocus: hasFocus,
+                pColor: isEnabled
+                  ? hasFocus
+                    ? inputTheme.border!.borderSide.color
+                    : theme.textTheme.bodyMedium!.color
+                  : theme.disabledColor
+              )
+            : null,
         ),
-      ),
-  );
-}
-
-  @override
-  Widget buildContent(BuildContext context) {
-  LdImageController inst = LdImageController.instance;
-    return GetBuilder<ViewController>(
-        id: id,
-        builder: (controller) {
-          if (imageKey == null) {
-            return _buildEditField(context, null);
-          }
-
-          Image? img = inst.getStoredImage(imageKey!);
-          if (img == null) {
-            inst.loadImage(
-              imageKey!,
-              pTgts: [id],
-              pAsset: asset,
-              pIcon: iconData,
-              pWidth: defIconWidth,
-              pHeight: defIconHeight,
-            );
-
-            return _buildEditField(context, null);
-          }
-
-          return _buildEditField(context, img);
-        },
       );
   }
 
   @override
-  void dispose() {
-    // Aquest widget no necessita alliberar recursos explícitament.
+  Widget buildContent(BuildContext context) {
+    String tname = runtimeType.toString();
+    Debug.debug(1, "LdTextField.buildContent: ${xCtrl.id}");
+    Debug.debug(1, "ctrl enregistrat?[${xCtrl.id}, '$tname']: ${Get.isRegistered(tag: tname)}");
+    LdImageController inst = LdImageController.inst;
+    return GetBuilder<LdViewController>(
+      id: {xCtrl.id},
+      tag: wCtrl.runtimeType.toString(),
+      builder: (controller) => 
+        GetBuilder<LdImageController>(
+          id: {xCtrl.id},
+          builder: (controller) {
+            if (imgId == null) {
+              return _buildEditField(context, null);
+            }
+
+            Image? img = inst.getStoredImage(imgId!);
+            if (img == null) {
+              inst.loadImageFromId(
+                imgId!,
+                pTgts:   [xCtrl.id],
+                pRef:    imgId,
+                pWidth:  defIconWidth,
+                pHeight: defIconHeight,
+              );
+
+              return _buildEditField(context, null);
+            }
+
+            return _buildEditField(context, img);
+          },
+        )
+      );
   }
 }

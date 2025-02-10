@@ -1,6 +1,7 @@
 // Aplicació pel desenvolupament i proves de widgets i pàgines de 'Sabina'.
 // CreatedAt: 2025/01/18 ds. JIQ
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:ld_wbench/02_tools/index.dart';
 import 'package:provider/provider.dart';
@@ -11,9 +12,15 @@ import 'package:ld_wbench/06_theme/app_theme.dart';
 
 import '01_pages/routes.dart';
 
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Get.put<LdImageController>(LdImageController(), permanent: true);
+  Get.isLogEnable = kDebugMode;
+  GetInstance();
+  LdImageController();
+  // XReg.inst.register(LdImageController());
+  // Get.put<LdImageController>(LdImageController(), permanent: true);
+  
   runApp(ChangeNotifierProvider(
       create: (context) => ThemeProvider(),
       child: const Application(true),

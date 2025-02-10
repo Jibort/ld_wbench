@@ -78,7 +78,7 @@ abstract class DeepDo {
 
   // Afegeix un pas a la pila de pasos que s'executarà immediatament si
   // la pàgina està carregada.
-  Future<void> addFnNow(ViewController pCtrl, FnStep pStep,
+  Future<void> addFnNow(LdViewController pCtrl, FnStep pStep,
       {List<dynamic>? pArgs, FnThen? pThen, FnExc? pOnExc, LoadStep? pLoadStep}) async {
     addFn(pStep, pArgs: pArgs, pThen: pThen, pOnExc: pOnExc, pLoadStep: pLoadStep);
     if (isLoaded) await runSteps();

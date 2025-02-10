@@ -62,7 +62,9 @@ TextStyle txsLabelStyle({
   required BuildContext pCxt,
   bool pIsEnabled = true, 
   bool pIsFocused =  false, 
-  bool pIsError = false}) {
+  bool pIsError = false,
+  Color? pColor,
+  }) {
     ThemeData theme = Theme.of(pCxt);
     return TextStyle(
       fontWeight: (pIsFocused)? FontWeight.bold: FontWeight.normal,
@@ -73,13 +75,15 @@ TextStyle txsLabelStyle({
           : FontStyle.italic
         : FontStyle.normal,
       backgroundColor: Colors.transparent,
-      color: (!pIsEnabled)
-        ? theme.disabledColor
-        : (pIsFocused)
-          ? theme.colorScheme.primary
-          : (pIsError)
-            ? theme.colorScheme.error
-            : theme.colorScheme.onSecondary,
+      color: (pColor != null) 
+        ? pColor
+        : (!pIsEnabled)
+          ? theme.disabledColor
+          : (pIsFocused)
+            ? theme.inputDecorationTheme.border!.borderSide.color
+            : (pIsError)
+              ? theme.colorScheme.error
+              : theme.colorScheme.onSecondary,
       fontFamily: 'Roboto',
     );
 }

@@ -5,93 +5,142 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
-import 'package:ld_wbench/01_pages/01_01_view_tools/index.dart';
+import 'package:ld_wbench/02_tools/index.dart';
 import 'package:ld_wbench/05_widgets/index.dart';
 
-import 'data.dart';
+import 'state.dart';
 
-class WidgetsViewCtrl extends ViewController {
+class WidgetsViewCtrl extends LdViewController {
   static String get className => "WidgetsViewCtrl";
+
+  // WIDGETS DEL VIEW -----------------
+  LdTextField? edtName;
+  LdTextField? edtFamilyName;
+  LdTextField? edtAddress;
   
   // IDENTIFICADORS DE CAMPS ----------
-  static int btnA = 2_000;
-  static int btnB = btnA + 1;
-  static int imgpd = btnB + 1;
-  static int edtText = imgpd + 1;
+  static String btnA      = "2_000";
+  static String btnB      = "2_001";
+  static String imgpd     = "2_002";
+  static String edtText   = "2_003";
+  static String edtText2  = "2_004";
+  static String edtText3  = "2_005";
+  static String actSwitch = "2_006";
+
+  // COMPONENTS -----------------------
+  late LdButton ldBtnA;
 
   // CONSTRUCTORS ---------------------
-  WidgetsViewCtrl({required WidgetsViewData pState}):
-    super(pTitle: "Títol des de WidgetsViewCtrl", pMsg: "") {
-    state = pState;
+  WidgetsViewCtrl({required WidgetsViewState pState}):
+    super(pState: pState) {
+    Debug.debug(1, "WidgetsViewCtrl() [constructor]...");
 
-    if (!Get.isRegistered<WidgetsViewCtrl>(tag: WidgetsViewCtrl.className)) {
-      Get.put(this, tag: WidgetsViewCtrl.className);
-    }
-    addWidgets([btnA, btnB, imgpd]);
+    addWidgets([btnA, btnB, imgpd, actSwitch ]);
+    Debug.debug(1, "WidgetsViewCtrl() ...[constructor]");
   }
 
   // EXTENSIÓ DE 'ViewController' -----
-Widget _buildSafeButtonA(BuildContext context) {
+  LdTextField _buildEdtName(BuildContext context) {
+    edtName ??= LdTextField(
+      pId: edtText, 
+      imgId: "psicodex_2",
+      pLabel: "Nom",
+      pVCtrl: this,
+);
+    return edtName!;
+  }
+
+  LdTextField _buildEdtFamilyName(BuildContext context) {
+    edtFamilyName ??= LdTextField( 
+      pId: edtText2, 
+      imgId: "icon_edit_icon",
+      pLabel: "Cognoms",
+      pVCtrl: this,
+    );
+
+    return edtFamilyName!;
+  }
+
+  LdTextField _buildEdtAddress(BuildContext context) {
+    edtAddress ??= LdTextField( 
+      pId:  edtText3, 
+      imgId: "align_vertical_bottom_outlined",
+      pLabel: "Direcció",
+      pVCtrl: this,
+    );
+    
+    return edtAddress!;
+  }
+  
+  Widget _buildSafeButtonA(BuildContext context) {
     try {
-      return LdButton(
-          id: btnA,
-          bCxt: this,
-          onPressed: () {
-            // Debug.info(("Butó Primary: PRÉS");
-          },
+      ldBtnA = LdButton(
+          pVCtrl: this,
+          pId: btnA,
+          pOnPressed: () { },
           pLabel: 'Butó',
-          // imageKey: "add_location",
-          ikey: "add_location",
-          iconData: Icons.add_location,
-          isPrimary: true,
+          imgId: Icons.add_location,
+          pIsPrimary: true,
         );
+    } on Exception catch (e) {
+      Debug.error("ERROR construint LdButton A: $e", e);
+      return Text("Error carregant el botó A.");
     } catch (e) {
-      // Debug.info(("ERROR construint LdButton A: $e");
-      // Debug.info((stack.toString());
+      Debug.error("ERROR construint LdButton A: $e", null);
       return Text("Error carregant el botó A.");
     }
+    return ldBtnA;
   }
 
 Widget _buildSafeButtonB(BuildContext context) {
     try {
       return LdButton(
-          id: btnB,
-          bCxt: this,
-          onPressed: () { 
-            notify(pTargets: [btnA, edtText]);
+          pVCtrl: this,
+          pId: btnB,
+          pOnPressed: () { 
+            ldBtnA.setEnabled = !ldBtnA.isEnabled;
             themeProvider!.toggleTheme(); 
+            notify(pTgts: [btnA, edtText]);
           },
           pLabel: 'Butó Secundari',
-          ikey: "align_vertical_bottom_outlined",
-          iconData: Icons.align_vertical_bottom_outlined,
-          isPrimary: false,
+          imgId: Icons.align_vertical_bottom_outlined,
+          pIsPrimary: false,
         );
     } catch (e) {
-      // Debug.info(("ERROR construint LdButton B: $e");
-      // Debug.info((stack.toString());
+      // Debug.debug(1, ("ERROR construint LdButton B: $e");
+      // Debug.debug(1, (stack.toString());
       return Text("Error carregant el botó B.");
     }
   }
 
   @override
-  Widget buildWidget(BuildContext pCxt) {
-    // Debug.info(("WidgetsViewCtrl.buildWidget(BuildContext)");
-    
-    WidgetsViewData data = super.state as WidgetsViewData;
+  Widget buildView(BuildContext pCxt) {
     return BaseScaffold(
       pCxt: pCxt,
-      pTitle: data.title,
+      pTitle: state.title,
       pViewCtrl: this,
-      pBody: Center(
+      // pActions: [ LdActionIcon(id: actSwitch, bCxt: this, iconData: Icons.mode, onPressed: () {
+      //     notify(pTargets: [ btnA, edtText, actSwitch ]);
+      //     themeProvider!.toggleTheme(); 
+      //   })
+      // ],
+      pBody: SingleChildScrollView(
           child: Column(mainAxisSize: MainAxisSize.min, mainAxisAlignment: MainAxisAlignment.center, children: [
         _buildSafeButtonA(pCxt),
         SizedBox(height: 15.0.h),
         _buildSafeButtonB(pCxt),
         SizedBox(height: 15.0.h),
-        LdImage(id: imgpd, bCxt: this, imageKey: "psicodex", width: 20.0.w, height: 20.0.h), //"icon_edit_icon"
+        LdImage(
+          pId: imgpd, 
+          pVCtrl: this,
+          imgId: "psicodex", 
+          pWidth: 20.0.w, 
+          pHeight: 20.0.h
+        ), //"icon_edit_icon"
         SizedBox(height: 15.0.h),
-        LdTextField(id: edtText, bCxt: this, imageKey: "psicodex_2", pLabel: "Nom de pila"), // "icon_edit_icon"
+        _buildEdtName(pCxt),
+        _buildEdtFamilyName(pCxt),
+        _buildEdtAddress(pCxt),
       ])),
     );
   }

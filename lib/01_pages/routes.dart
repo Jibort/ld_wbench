@@ -16,3 +16,4 @@ List<GetPage<dynamic>> appPages = [
     page: () => WidgetsView(),
   ),
 ];
+

@@ -14,40 +14,39 @@ import 'package:ld_wbench/06_theme/app_theme.dart';
 import 'package:provider/provider.dart';
 
 export "controller.dart";
-export "data.dart";
+export "state.dart";
 
 class WidgetsViewBindings extends Bindings {
   @override
   void dependencies() {
-    Debug.info("WidgetsViewBindings.dependencies() [in]");
-    WidgetsViewData data = WidgetsViewData(pTitle: "ViewTitle", pMsg: "");
-     Get.put(WidgetsViewCtrl(pState: data), tag: WidgetsViewCtrl.className, permanent: false);
-    // Get.put(WidgetsViewCtrl(pState: data), tag: WidgetsViewCtrl.className);
-    Debug.info("Controladors registrats: ${Get.keys}");
-    Debug.info("Controller Registrat?: ${Get.isRegistered(tag: WidgetsViewCtrl.className)}");
-    Debug.info("WidgetsViewBindings.dependencies() [out]");
+    Debug.debug(1, "WidgetsViewBindings.dependencies(): IN...");
+    WidgetsViewState state = WidgetsViewState(pTitle: "ViewTitle", pMsg: "");
+    Debug.debug(1, "WidgetsViewBindings.dependencies(): Tag registrant: '${WidgetsViewCtrl.className}'");
+    state.viewCtrl = WidgetsViewCtrl(pState: state);
+    Debug.debug(1, "WidgetsViewBindings.dependencies(): ...OUT");
   }
 }
 
-class WidgetsView extends GetView<WidgetsViewCtrl> {
+class WidgetsView extends GetView<LdViewController> {
   WidgetsView({super.key}) {
-    // Debug.info(("WidgetsView() [constructor])");
+    // Debug.debug(1, ("WidgetsView() [constructor])");
   }
 
   @override
   Widget build(BuildContext pCxt) {
-    // Debug.info(("WidgetsView.build(BuildContext)");
+    // Debug.debug(1, ("WidgetsView.build(BuildContext)");
 
-final WidgetsViewCtrl? controller = Get.isRegistered<WidgetsViewCtrl>(tag: WidgetsViewCtrl.className)
-        ? Get.find<WidgetsViewCtrl>(tag: WidgetsViewCtrl.className)
+    final LdViewController? vctrl = XReg.inst.isRegisteredTag(WidgetsViewCtrl.className)
+        ? Get.find<LdViewController>(tag: WidgetsViewCtrl.className)
         : null;
 
-    if (controller == null) {
-      Debug.error("❌ `WidgetsViewCtrl` encara no està registrat!", null);
+    if (vctrl == null) {
+      XReg.inst.logRegisteredCtrls();
+      Debug.error("❌ `ViewController` encara no està registrat!", null);
       return Center(child: Text("Error carregant la vista."));
     }
 
-    controller.themeProvider = Provider.of<ThemeProvider>(pCxt);
-    return controller.buildWidget(pCxt);
+    vctrl.themeProvider = Provider.of<ThemeProvider>(pCxt);
+    return vctrl.buildView(pCxt);
   }
 }

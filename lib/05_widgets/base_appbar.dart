@@ -25,7 +25,7 @@ class BaseAppBar extends AppBar {
   BaseAppBar({
     super.key,
     required BuildContext pCxt,
-    required ViewController pViewCtrl,
+    required LdViewController pViewCtrl,
     required String pTitle,
     String? pSubTitle,
     List<LdActionIcon>? pActions,
@@ -42,7 +42,7 @@ class BaseAppBar extends AppBar {
             title: GetBuilder(
               id: WidgetKey.appBar.idx,
               init: pViewCtrl,
-              builder: (ViewController pCtrl) {
+              builder: (LdViewController pCtrl) {
                 return Column(children: [
                   (pCtrl.state.isLoaded)
                       ? _TitleWidget(pTitle, pLeading,
@@ -62,7 +62,7 @@ class BaseAppBar extends AppBar {
 
 class _ProgressTitleWidget extends GetWidget {
   // MEMBRES --------------------------
-  final ViewController _viewCtrl;
+  final LdViewController _viewCtrl;
   final String _title;
   final Color _fgColor;
 
@@ -74,7 +74,7 @@ class _ProgressTitleWidget extends GetWidget {
   // WIDGET ---------------------------
   @override
   Widget build(BuildContext pCxt) {
-    return GetBuilder<ViewController>(
+    return GetBuilder<LdViewController>(
         id: WidgetKey.appBarProgress.idx,
         init: _viewCtrl,
         builder: (context) {
@@ -154,9 +154,11 @@ class _TitleWidget extends GetWidget {
   @override
   Widget build(BuildContext pCxt) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         (isNotNull(_leading)) ? _leading! : const SizedBox(),
-        (isNull(_subTitle) || isNull(_subTitle))
+        (isNull(_subTitle))
             ? Text(_title, style: txsAppBarMainTitleStyle(pCxt: pCxt, pFgColor: _fgColor))
             : Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -165,6 +167,12 @@ class _TitleWidget extends GetWidget {
                   Text(_subTitle!, style: txsAppBarSubtitleStyle(pCxt: pCxt, pFgColor: _fgColor))
                 ],
               ),
+        (_actions != null)
+          ? Row(
+            children: [
+              for (var action in _actions) action,
+            ])
+          : Container()
       ],
     );
   }

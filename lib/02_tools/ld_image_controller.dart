@@ -15,25 +15,18 @@ import '../06_theme/app_theme.dart';
 const No_Image = "no_image";
 
 
-class LdImageController extends GetxController {
-  static LdImageController instance = Get.put(LdImageController()); // Singleton
+class LdImageController extends LdController {
+  static LdImageController inst = LdImageController(); // Singleton
   final Map<String, Image> _imgs = {};
 
   // CONSTRUCTORS ---------------------
-  LdImageController() {
-    // _imgs[No_Image] = Image.asset("assets/No_Image.png");
-  }
+  LdImageController();
 
+  // IMPLEMENTACIÓ DE 'LdController' --
   @override
   void onInit() {
     super.onInit();
-
-    // 🔥 Afegim un debug per comprovar quan es crea la instància i què hi ha a _imageCache
-    // Debug.info(("LdImageController.onInit() - Inicialitzant imatges");
-
     _imgs["No_Image"] = Image.asset("assets/No_Image.png");
-
-    // Debug.info(("LdImageController.onInit() - Imatges disponibles: ${_imgs.keys.toList()}");
   }
 
   bool exists(String? pKey) {
@@ -41,22 +34,17 @@ class LdImageController extends GetxController {
   }
 
   Image? getStoredImage(String? key) {
-    // Debug.info(("LdImageController.getStoredImage() - Buscant imatge: $key");
-    // Debug.info(("LdImageController.getStoredImage() - Imatges actuals en _imageCache: ${_imgs.keys.toList()}");
-
-    return key != null ? _imgs[key] ?? _imgs[No_Image]: _imgs[No_Image];
+    return (key != null) ? _imgs[key]: _imgs[No_Image];
+    // return key != null ? _imgs[key] ?? _imgs[No_Image]!: _imgs[No_Image]!;
   }
 
-  ColorFiltered getFilteredImage({String? pKey, bool pIsEnabled = true, bool pIsFocused = false, Color? pColor}) {
+  ColorFiltered getFilteredImage({String? pKey, bool pIsEnabled = true, bool pHasFocus = false, Color? pColor}) {
     Image? img = getStoredImage(pKey);
     if (pColor == null) {
         final theme = Theme.of(Get.context!);
-        // final fgColor = !pIsEnabled ? Colors.grey :
-        //                 isDanger || isPrimary ? theme.colorScheme.onPrimary :
-        //                 theme.colorScheme.onSecondary;
         pColor = !pIsEnabled 
           ? Colors.grey
-          : pIsFocused
+          : pHasFocus
             ?  theme.colorScheme.primary
             : theme.colorScheme.onSecondary;
       }
@@ -80,9 +68,26 @@ class LdImageController extends GetxController {
     }
   }
 
+  Future<void> loadImageFromId(
+    String pKey, {
+    dynamic pRef,
+    List<String>? pTgts,
+    double? pWidth,
+    double? pHeight
+  }) {
+    if (pRef is String) {
+      return loadImage(pKey, pTgts: pTgts, pAsset: pRef, pWidth: pWidth, pHeight: pHeight);  
+    } else if (pRef is IconData) {	
+      return loadImage(pKey, pTgts: pTgts, pIcon: pRef, pWidth: pWidth, pHeight: pHeight);
+    } else {
+      Debug.error("LdImageController.loadImage(): 'pRef' no és String ni tampoc IconData", null);
+      return Future.value();
+    }
+  }
+
   Future<void> loadImage(
     String pKey, {
-    List<int>? pTgts,
+    List<String>? pTgts,
     String? pAsset,
     IconData? pIcon,
     double? pWidth,
@@ -144,15 +149,14 @@ class LdImageController extends GetxController {
       ImageAndSize img = pImgs[idx];
       step(FiFo pQueue, List<dynamic> pArgs) async {
         if (img.source is IconData) {
-          Debug.info("Demanant l'icona de: ${img.key} (${img.source})");
+          Debug.debug(1, "Demanant l'icona de: ${img.key} (${img.source})");
           await loadImage(img.key, pTgts: img.tgts, pIcon: img.source, pWidth: img.width, pHeight: img.height);
         } else {
-          Debug.info("Demanant la imatge de: ${img.key} (${img.source})");
+          Debug.debug(1, "Demanant la imatge de: ${img.key} (${img.source})");
           await loadImage(img.key, pTgts: img.tgts, pAsset: img.source, pWidth: img.width, pHeight: img.height);
         }      
       }
-      pDo.addFn(step);
-      // pDo.sneakFn(step);
+      pDo.sneakFn(step);
     }
   }
 }
@@ -161,7 +165,7 @@ class ImageAndSize {
   String key;
   dynamic source;
   double width, height;
-  List<int> tgts;
+  List<String> tgts;
 
   ImageAndSize({required this.key, required this.source, required this.width, required this.height, required this.tgts});
 }

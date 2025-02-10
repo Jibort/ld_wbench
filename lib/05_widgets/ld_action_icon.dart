@@ -4,79 +4,114 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:ld_wbench/02_tools/index.dart';
 import 'package:ld_wbench/05_widgets/index.dart';
-
-
+import 'package:ld_wbench/06_theme/app_theme.dart';
 
 /// LdIconAction: Un ActionButton estilitzat per al projecte, basat en LdWidget.
 /// Pot mostrar una icona basada en [IconData] o en un asset.
 class LdActionIcon extends LdWidget {
-  final VoidCallback? onPressed;
-  final IconData? icon;
-  final String? assetIcon;
-  final double? _size;
-  final Color? color;
-  final Color? backgroundColor;
+  dynamic imgId;
+  Image?  img;
+  final double? size;
   final bool isCircular;
 
   LdActionIcon({
     super.key,
-    required super.id,
-    required super.bCxt,
-    super.pLabel,
-    required this.onPressed,
-    this.icon,
-    this.assetIcon,
-    double? size,
-    this.color,
-    this.backgroundColor,
+    String? pId,
+    this.imgId,
+    String  pLabel = '',
+    int?    pErrorCode,
+    String? pErrorMessage,
+    bool pIsEnabled = true, 
+    bool pIsMandatory = false, 
+    bool pIsVisible = true,
+    bool pIsPrimary = true,
     this.isCircular = true,
-  }): _size = size?? 30.0.h;
+    this.size,
+    FocusNode? pFocusNode,
+    VoidCallback? pOnPressed,
+    required LdViewController pVCtrl,
+  }): super(pWCtrl: LdWidgetController(
+    pId: pId,
+    pLabel: pLabel,
+    pErrorCode: pErrorCode,
+    pErrorMessage: pErrorMessage,
+    pIsEnabled: pIsEnabled, 
+    pIsMandatory: pIsMandatory, 
+    pIsVisible: pIsVisible,
+    pIsPrimary: pIsPrimary,
+    pVCtrl: pVCtrl,
+    pOnPressed: pOnPressed,
+  ));
+
+  @override
+  // ignore: unnecessary_overrides
+  Widget build(BuildContext context) {
+    return super.build(context);
+  }
 
   @override
   Widget buildContent(BuildContext context) {
-return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        InkWell(
-          onTap: onPressed,
-          borderRadius: BorderRadius.circular(isCircular ? _size! / 2 : 8.0),
-          child: Container(
-            width: _size,
-            height: _size,
-            decoration: BoxDecoration(
-              color: backgroundColor ?? Theme.of(context).primaryColor,
-              shape: isCircular ? BoxShape.circle : BoxShape.rectangle,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black26,
-                  blurRadius: 4.0,
-                  offset: Offset(2, 2),
-                ),
-              ],
-            ),
-            child: Center(
-              child: icon != null
-                  ? Icon(icon, size: _size! * 0.6, color: color ?? Colors.white)
-                  : Image.asset(assetIcon!, width: _size! * 0.6, height: _size * 0.6),
-            ),
-          ),
-        ),
-        if (label != "?") ...[
-          SizedBox(height: 4.0),
-          Text(
-            label,
-            style: TextStyle(fontSize: 12.0, color: color ?? Colors.black),
-            textAlign: TextAlign.center,
-          ),
-        ],
-      ],
+    return GetBuilder<LdImageController>( // GetBuilder<LdImageController>(
+      id: xCtrl.id,
+      builder: (controller) {
+        if (imgId == null) {
+          return _buildButton(context, null);
+        }
+
+        Image? img = controller.getStoredImage(imgId);
+        if (img == null) {
+          controller.loadImageFromId(
+            imgId,
+            pTgts: [xCtrl.id],
+            pWidth: defIconWidth,
+            pHeight: defIconHeight,
+          );
+
+          return _buildButton(context, null);
+        }
+
+        return _buildButton(context, img);
+      },
     );
   }
-  
-  @override
-  void dispose() {
-    // Aquest widget no requereix alliberar recursos explícitament.
+
+  Widget _buildButton(BuildContext context, Image? icon) {
+    final bgColor = isEnabled ? Colors.transparent: Colors.grey.shade600;
+                        // isDanger ? Colors.redAccent :
+                        // isPrimary ? theme.colorScheme.primary :
+                        // theme.colorScheme.secondary;
+    final fgColor = isEnabled ? Colors.black: Colors.grey; 
+                        // isDanger || isPrimary ? theme.colorScheme.onPrimary :
+                        // theme.colorScheme.onSecondary;
+
+    return InkWell(
+      onTap: isEnabled? wCtrl.onPressed: null,
+      borderRadius: BorderRadius.circular(isCircular ? size! / 2 : 8.0),
+      child: Container(
+        width: size!,
+        height: size!,
+        decoration: BoxDecoration(
+          color: bgColor,
+          shape: isCircular ? BoxShape.circle : BoxShape.rectangle,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black26,
+              blurRadius: 4.0,
+            ),
+          ],
+        ),
+        child: Center(
+          child: icon != null
+              ? ColorFiltered(
+                  colorFilter: ColorFilter.mode(fgColor, BlendMode.srcIn),
+                  child: icon,
+                )
+              : Container(),
+        ),
+      )
+    );
   }
 }
