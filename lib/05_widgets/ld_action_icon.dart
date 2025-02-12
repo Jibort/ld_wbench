@@ -63,7 +63,7 @@ class LdActionIcon extends LdWidget {
 
         Image? img = controller.getStoredImage(imgId);
         if (img == null) {
-          controller.loadImageFromId(
+          controller.loadImageFromRef(
             imgId,
             pTgts: [xCtrl.id],
             pWidth: defIconWidth,

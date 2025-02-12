@@ -9,8 +9,12 @@ class XCtrl implements Comparable {
                       // el nom del tipus com a prefix.
 
   // CONSTRUCTORS ---------------------
-  XCtrl({ required Type pType, required String pId })
-    : _type = pType, _id = pId, _tag = "${pType.toString()}_$pId";
+  XCtrl({ required Type pType, String? pId })
+    : _type = pType,
+      _id = (pId != null)? pId: pType.toString(),
+      _tag = (pId != null)
+        ? "${pType.toString()}_$pId"
+        : pType.toString();
 
   // GETTERS/SETTERS -------------------
   Type   get type => _type;

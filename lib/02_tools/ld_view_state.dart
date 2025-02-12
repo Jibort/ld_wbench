@@ -29,10 +29,8 @@ abstract class LdViewState extends DeepDo {
     _errorCode = pErrorCode,
     _errorMessage = pErrorMessage,
     _exception = pException,
-    super(null) {
-      // Debug.debug(1, ("ViewData(...) [constructor]");
-  }
-
+    super(null);
+    
   // GETTERS i SETTERS ----------------
   String get title => _title;
   String? get message => _message;

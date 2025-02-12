@@ -16,11 +16,8 @@ import '01_pages/routes.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Get.isLogEnable = kDebugMode;
-  GetInstance();
-  LdImageController();
-  // XReg.inst.register(LdImageController());
-  // Get.put<LdImageController>(LdImageController(), permanent: true);
-  
+  LdImageController.inst;
+
   runApp(ChangeNotifierProvider(
       create: (context) => ThemeProvider(),
       child: const Application(true),
@@ -66,7 +63,6 @@ class Application extends StatelessWidget {
             themeMode: themeProvider.mode,
   
             getPages: appPages,
-            // initialBinding: WidgetsViewBindings(),
             initialRoute: rtWidgetsView,
           );
         });

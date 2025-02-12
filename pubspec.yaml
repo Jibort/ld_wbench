@@ -15,7 +15,10 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
-  get: ^4.6.6
+  # get: ^4.6.6
+  get:
+    path: ../getx
+    
   flutter_screenutil: ^5.9.3
   fixnum: ^1.1.1
   provider: ^6.1.2

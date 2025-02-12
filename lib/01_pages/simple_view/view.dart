@@ -16,24 +16,19 @@ import 'package:provider/provider.dart';
 export "controller.dart";
 export "state.dart";
 
-class WidgetsViewBindings extends Binding {
+class SimpleViewBindings extends Bindings {
   @override
-  List<Bind<dynamic>> dependencies() {
+  void dependencies() {
     Debug.debug(1, "WidgetsViewBindings.dependencies(): IN...");
     WidgetsViewState state = WidgetsViewState(pTitle: "ViewTitle", pMsg: "");
     Debug.debug(1, "WidgetsViewBindings.dependencies(): Tag registrant: '${WidgetsViewCtrl.className}'");
     state.viewCtrl = WidgetsViewCtrl(pState: state);
     Debug.debug(1, "WidgetsViewBindings.dependencies(): ...OUT");
-
-    return [
-      Bind.put(() => state.viewCtrl, permanent: true),
-      Bind.put(() => LdImageController.inst, permanent: true),
-    ];
   }
 }
 
-class WidgetsView extends GetView<LdViewController> {
-  const WidgetsView({ super.key });
+class SimpleView extends GetView<LdViewController> {
+  const SimpleView({ super.key });
 
   @override
   Widget build(BuildContext pCxt) {

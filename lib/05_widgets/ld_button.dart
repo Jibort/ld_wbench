@@ -16,6 +16,7 @@ import 'package:ld_wbench/06_theme/app_theme.dart';
 /// S'integra amb el tema definit i pot ser primari, secundari o de perill.
 class LdButton extends LdWidget {
   // MEMBRES --------------------------
+  dynamic imgKey;
   dynamic imgId;
   Image?  img;
 
@@ -23,6 +24,7 @@ class LdButton extends LdWidget {
   LdButton({
     super.key,
     String? pId,
+    this.imgKey,
     this.imgId,
     String  pLabel = '',
     int?    pErrorCode,
@@ -52,20 +54,23 @@ class LdButton extends LdWidget {
   Widget buildContent(BuildContext context) {
     return GetBuilder<LdImageController>(
       id: wCtrl.id,
+      tag: imgId, 
+      init: LdImageController.inst,
       builder: (pCtrl) => 
         GetBuilder<LdViewController>(
           id: wCtrl.vCtrl.id,
           tag: wCtrl.xCtrl.tag,
           init: wCtrl.vCtrl,
           builder: (pCxt) {
-          if (imgId == null) {
+          if (imgKey == null) {
             return _buildButton(context, null);
           }
 
           img ??= pCtrl.getStoredImage(imgId!);
-          if (img == null && imgId != null) {
-            pCtrl.loadImageFromId(
-              imgId,
+          if (img == null && imgId != null && imgKey != null) {
+            pCtrl.loadImageFromRef(
+              imgKey,
+              pRef: imgId,
               pTgts: [wCtrl.id],
               pWidth: defIconWidth,
               pHeight: defIconHeight,

@@ -13,6 +13,7 @@ import 'package:ld_wbench/06_theme/app_theme.dart';
 class LdTextField extends LdWidget {
   // MEMBRES --------------------------
   final TextEditingController txtCtrl;
+  String? imgKey;
   dynamic imgId;
   Image?  img;
   final String? hintText;
@@ -24,6 +25,7 @@ class LdTextField extends LdWidget {
   LdTextField({
     super.key,
     String? pId,
+    this.imgKey,
     this.imgId,
     String  pLabel = '',
     dynamic pText,
@@ -60,11 +62,6 @@ class LdTextField extends LdWidget {
  
 
   Widget _buildEditField(BuildContext pCxt, Image? pImage) {
-    // Debug.debug(1, "LdTextField._buildEditField: ${xCtrl.id}");
-    // Debug.debug(1, " /// isEnabled?[${xCtrl.id}]: $isEnabled");
-    // Debug.debug(1, " /// isFocused?[${xCtrl.id}]: $hasFocus");
-    // Debug.debug(1, " /// isVisible?[${xCtrl.id}]: $isVisible");
-
     LdImageController inst = LdImageController.inst;
     ThemeData theme = Theme.of(pCxt);
     // Color borderColor = theme.inputDecorationTheme.border?.borderSide.color ?? getBorderColor(pCxt);
@@ -92,9 +89,9 @@ class LdTextField extends LdWidget {
                 ? inputTheme.labelStyle!.color
                 : theme.textTheme.bodyMedium!.color,
           ),
-          prefixIcon: (inst.exists(imgId))
+          prefixIcon: (imgKey != null && inst.exists(imgKey!))
             ? inst.getFilteredImage(
-                pKey: imgId, 
+                pKey: imgKey, 
                 pIsEnabled: isEnabled, 
                 pHasFocus: hasFocus,
                 pColor: isEnabled
@@ -110,9 +107,10 @@ class LdTextField extends LdWidget {
 
   @override
   Widget buildContent(BuildContext context) {
-    String tname = runtimeType.toString();
-    Debug.debug(1, "LdTextField.buildContent: ${xCtrl.id}");
-    Debug.debug(1, "ctrl enregistrat?[${xCtrl.id}, '$tname']: ${Get.isRegistered(tag: tname)}");
+    // String tname = "${runtimeType.toString()}_${runtimeType.toString()}";
+    // Debug.debug(1, "LdTextField.buildContent: ${xCtrl.id}");
+    // Debug.debug(1, "ctrl enregistrat?[${xCtrl.id}, '$tname']: ${xCtrl.id}");
+    // Debug.debug(1, "ctrl enregistrat?[${xCtrl.id}, '$tname']: ${Get.isRegistered(tag: tname)}");
     LdImageController inst = LdImageController.inst;
     return GetBuilder<LdViewController>(
       id: {xCtrl.id},
@@ -120,15 +118,16 @@ class LdTextField extends LdWidget {
       builder: (controller) => 
         GetBuilder<LdImageController>(
           id: {xCtrl.id},
+          init: LdImageController.inst,
           builder: (controller) {
-            if (imgId == null) {
+            if (imgKey == null) {
               return _buildEditField(context, null);
             }
 
-            Image? img = inst.getStoredImage(imgId!);
-            if (img == null) {
-              inst.loadImageFromId(
-                imgId!,
+            Image? img = inst.getStoredImage(imgKey!);
+            if (img == null && imgKey != null && imgKey!.isNotEmpty) {
+              inst.loadImageFromRef(
+                imgKey!,
                 pTgts:   [xCtrl.id],
                 pRef:    imgId,
                 pWidth:  defIconWidth,

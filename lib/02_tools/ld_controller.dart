@@ -11,7 +11,7 @@ abstract class LdController extends GetxController {
 
   // CONSTRUCTORS ---------------------
   LdController({ String? pId }) {
-    _xCtrl = XCtrl(pType: runtimeType, pId: pId?? runtimeType.toString());
+    _xCtrl = XCtrl(pType: runtimeType); // , pId: pId?? runtimeType.toString());
     XReg.inst.register(this);  // ✅ Auto-registre immediat
     Debug.debug(2, "${runtimeType.toString()}.(${xCtrl.tag}): Controlador enregistrat?: ${XReg.inst.isRegistered(this)}");
   }

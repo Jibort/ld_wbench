@@ -17,7 +17,7 @@ const No_Image = "no_image";
 
 class LdImageController extends LdController {
   static LdImageController inst = LdImageController(); // Singleton
-  final Map<String, Image> _imgs = {};
+  final Map<dynamic, Image> _imgs = {};
 
   // CONSTRUCTORS ---------------------
   LdImageController();
@@ -29,16 +29,15 @@ class LdImageController extends LdController {
     _imgs["No_Image"] = Image.asset("assets/No_Image.png");
   }
 
-  bool exists(String? pKey) {
-    return pKey != null && _imgs.containsKey(pKey);
+  bool exists(String pKey) {
+    return _imgs.containsKey(pKey);
   }
 
-  Image? getStoredImage(String? key) {
-    return (key != null) ? _imgs[key]: _imgs[No_Image];
-    // return key != null ? _imgs[key] ?? _imgs[No_Image]!: _imgs[No_Image]!;
+  Image? getStoredImage(String key) {
+    return _imgs[key];
   }
 
-  ColorFiltered getFilteredImage({String? pKey, bool pIsEnabled = true, bool pHasFocus = false, Color? pColor}) {
+  ColorFiltered getFilteredImage({dynamic pKey, bool pIsEnabled = true, bool pHasFocus = false, Color? pColor}) {
     Image? img = getStoredImage(pKey);
     if (pColor == null) {
         final theme = Theme.of(Get.context!);
@@ -61,14 +60,16 @@ class LdImageController extends LdController {
       );
   }
 
-  void forgetImage(String pKey) {
-    Image? img = _imgs[pKey];
-    if (img != null) {
-      _imgs.remove(pKey);
+  void forgetImage(dynamic pKey) {
+    if (pKey != null) {
+      Image? img = _imgs[pKey];
+      if (img != null) {
+        _imgs.remove(pKey);
+      }
     }
   }
 
-  Future<void> loadImageFromId(
+  Future<void> loadImageFromRef(
     String pKey, {
     dynamic pRef,
     List<String>? pTgts,
@@ -151,10 +152,12 @@ class LdImageController extends LdController {
         if (img.source is IconData) {
           Debug.debug(1, "Demanant l'icona de: ${img.key} (${img.source})");
           await loadImage(img.key, pTgts: img.tgts, pIcon: img.source, pWidth: img.width, pHeight: img.height);
-        } else {
+        } else if (img.source is String) {
           Debug.debug(1, "Demanant la imatge de: ${img.key} (${img.source})");
           await loadImage(img.key, pTgts: img.tgts, pAsset: img.source, pWidth: img.width, pHeight: img.height);
-        }      
+        } else {
+          Debug.error("LdImageController.loadImages: Tipus de font desconegutrt: ${img.key}  (${img.source})", null);
+        }
       }
       pDo.sneakFn(step);
     }
